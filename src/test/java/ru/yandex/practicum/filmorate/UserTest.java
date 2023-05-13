@@ -24,15 +24,15 @@ public class UserTest {
     @Test
     void addUserOkTest() throws Exception {
         mockMvc.perform(
-                        post("/users")
-                                .content("{\n" +
-                                        "  \"login\": \"dolore\",\n" +
-                                        "  \"name\": \"Nick Name\",\n" +
-                                        "  \"email\": \"mail@mail.ru\",\n" +
-                                        "  \"birthday\": \"1946-08-20\"\n" +
-                                        "}")
-                                .contentType(MediaType.APPLICATION_JSON)
-                ).andExpect(status().isOk());
+                post("/users")
+                        .content("{\n" +
+                                "  \"login\": \"dolore\",\n" +
+                                "  \"name\": \"Nick Name\",\n" +
+                                "  \"email\": \"mail@mail.ru\",\n" +
+                                "  \"birthday\": \"1946-08-20\"\n" +
+                                "}")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk());
     }
 
     @Test
@@ -47,6 +47,7 @@ public class UserTest {
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().is4xxClientError());
     }
+
     @Test
     void addUserFailEmailTest() throws Exception {
         mockMvc.perform(
@@ -60,6 +61,7 @@ public class UserTest {
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().is4xxClientError());
     }
+
     @Test
     void addUserFailBirthdayTest() throws Exception {
         mockMvc.perform(
@@ -73,6 +75,7 @@ public class UserTest {
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().is4xxClientError());
     }
+
     @Test
     void UpdateUseOkTest() throws Exception {
         mockMvc.perform(
@@ -97,6 +100,7 @@ public class UserTest {
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
     }
+
     @Test
     void UpdateUseUnknownTest() throws Exception {
         mockMvc.perform(
@@ -121,7 +125,7 @@ public class UserTest {
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().is4xxClientError());
     }
-    }
+}
 
 
 

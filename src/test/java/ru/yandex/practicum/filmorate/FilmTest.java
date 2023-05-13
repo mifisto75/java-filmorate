@@ -39,56 +39,59 @@ public class FilmTest {
     @Test
     void addFilmFailNameTest() throws Exception {
         mockMvc.perform(
-        post("/films")
-                .content("{\n" +
-                        "  \"name\": \"\",\n" +
-                        "  \"description\": \"Description\",\n" +
-                        "  \"releaseDate\": \"1900-03-25\",\n" +
-                        "  \"duration\": 200\n" +
-                        "}")
-                .contentType(MediaType.APPLICATION_JSON)
+                post("/films")
+                        .content("{\n" +
+                                "  \"name\": \"\",\n" +
+                                "  \"description\": \"Description\",\n" +
+                                "  \"releaseDate\": \"1900-03-25\",\n" +
+                                "  \"duration\": 200\n" +
+                                "}")
+                        .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().is4xxClientError());
     }
 
     @Test
     void addFilmFailDescripsonTest() throws Exception {
         mockMvc.perform(
-        post("/films")
-                .content("{\n" +
-                        "  \"name\": \"Film name\",\n" +
-                        "  \"description\": \"Пятеро друзей ( комик-группа «Шарло»), приезжают в город Бризуль. Здесь они хотят разыскать господина Огюста Куглова, который задолжал им деньги, а именно 20 миллионов. о Куглов, который за время «своего отсутствия», стал кандидатом Коломбани.\",\n" +
-                        "    \"releaseDate\": \"1900-03-25\",\n" +
-                        "  \"duration\": 200\n" +
-                        "}")
-                .contentType(MediaType.APPLICATION_JSON)
+                post("/films")
+                        .content("{\n" +
+                                "  \"name\": \"Film name\",\n" +
+                                "  \"description\": \"Пятеро друзей ( комик-группа «Шарло»), приезжают в город Бризуль. Здесь они хотят разыскать господина Огюста Куглова, который задолжал им деньги, а именно 20 миллионов. о Куглов, который за время «своего отсутствия», стал кандидатом Коломбани.\",\n" +
+                                "    \"releaseDate\": \"1900-03-25\",\n" +
+                                "  \"duration\": 200\n" +
+                                "}")
+                        .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().is4xxClientError());
     }
+
     @Test
     void addFilmFailReleaseDateTest() throws Exception {
         mockMvc.perform(
-        post("/films")
-                .content("{\n" +
-                        "  \"name\": \"Name\",\n" +
-                        "  \"description\": \"Description\",\n" +
-                        "  \"releaseDate\": \"1890-03-25\",\n" +
-                        "  \"duration\": 200\n" +
-                        "}")
-                .contentType(MediaType.APPLICATION_JSON)
+                post("/films")
+                        .content("{\n" +
+                                "  \"name\": \"Name\",\n" +
+                                "  \"description\": \"Description\",\n" +
+                                "  \"releaseDate\": \"1890-03-25\",\n" +
+                                "  \"duration\": 200\n" +
+                                "}")
+                        .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().is4xxClientError());
     }
+
     @Test
     void addFilmFailDurationt() throws Exception {
         mockMvc.perform(
-        post("/films")
-                .content("{\n" +
-                        "  \"name\": \"Name\",\n" +
-                        "  \"description\": \"Descrition\",\n" +
-                        "  \"releaseDate\": \"1980-03-25\",\n" +
-                        "  \"duration\": -200\n" +
-                        "}")
-                .contentType(MediaType.APPLICATION_JSON)
+                post("/films")
+                        .content("{\n" +
+                                "  \"name\": \"Name\",\n" +
+                                "  \"description\": \"Descrition\",\n" +
+                                "  \"releaseDate\": \"1980-03-25\",\n" +
+                                "  \"duration\": -200\n" +
+                                "}")
+                        .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().is4xxClientError());
     }
+
     @Test
     void updateFilmOkTest() throws Exception {
         mockMvc.perform(
@@ -102,18 +105,19 @@ public class FilmTest {
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
         mockMvc.perform(
-        put("/films")
-                .content("{\n" +
-                        "  \"id\": 1,\n" +
-                        "  \"name\": \"Film Updated\",\n" +
-                        "  \"releaseDate\": \"1989-04-17\",\n" +
-                        "  \"description\": \"New film update decription\",\n" +
-                        "  \"duration\": 190,\n" +
-                        "  \"rate\": 4\n" +
-                        "}")
-                .contentType(MediaType.APPLICATION_JSON)
+                put("/films")
+                        .content("{\n" +
+                                "  \"id\": 1,\n" +
+                                "  \"name\": \"Film Updated\",\n" +
+                                "  \"releaseDate\": \"1989-04-17\",\n" +
+                                "  \"description\": \"New film update decription\",\n" +
+                                "  \"duration\": 190,\n" +
+                                "  \"rate\": 4\n" +
+                                "}")
+                        .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
     }
+
     @Test
     void updateFilmUnknownTest() throws Exception {
         mockMvc.perform(
@@ -127,16 +131,16 @@ public class FilmTest {
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
         mockMvc.perform(
-        put("/films")
-                .content("{\n" +
-                        "  \"id\": 9999,\n" +
-                        "  \"name\": \"Film Updated\",\n" +
-                        "  \"releaseDate\": \"1989-04-17\",\n" +
-                        "  \"description\": \"New film update decription\",\n" +
-                        "  \"duration\": 190,\n" +
-                        "  \"rate\": 4\n" +
-                        "}")
-                .contentType(MediaType.APPLICATION_JSON)
+                put("/films")
+                        .content("{\n" +
+                                "  \"id\": 9999,\n" +
+                                "  \"name\": \"Film Updated\",\n" +
+                                "  \"releaseDate\": \"1989-04-17\",\n" +
+                                "  \"description\": \"New film update decription\",\n" +
+                                "  \"duration\": 190,\n" +
+                                "  \"rate\": 4\n" +
+                                "}")
+                        .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().is4xxClientError());
     }
 }
