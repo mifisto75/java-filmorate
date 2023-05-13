@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.controller.Exeptions.NotIdExeption;
+import ru.yandex.practicum.filmorate.Exeptions.NotIdExeption;
 import ru.yandex.practicum.filmorate.model.User;
 
 import javax.validation.Valid;
@@ -39,7 +39,7 @@ public class UserController {
             log.info("обнавлён пользыватель "+user);
         }else {
             log.warn("ошибка обновления "+user + " не возможно изменить того чего нет");
-            throw new NotIdExeption();
+            throw new NotIdExeption("not found");
         }
         return user;
     }

@@ -2,8 +2,8 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.controller.Exeptions.NotIdExeption;
-import ru.yandex.practicum.filmorate.controller.Exeptions.WeriOldFilmException;
+import ru.yandex.practicum.filmorate.Exeptions.NotIdExeption;
+import ru.yandex.practicum.filmorate.Exeptions.WeriOldFilmException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import javax.validation.Valid;
@@ -47,7 +47,7 @@ public class FilmController {
             }
         }else {
             log.warn("ошибка при обновлении фильма "+film + " не возможно изменить того чего нет");
-                throw new NotIdExeption();
+                throw new NotIdExeption("not found");
             }
         return film;
           }
