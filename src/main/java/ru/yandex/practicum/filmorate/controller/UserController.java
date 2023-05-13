@@ -2,10 +2,11 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.Exeptions.NotIdExeption;
+import ru.yandex.practicum.filmorate.Exeptions.NotFound;
 import ru.yandex.practicum.filmorate.model.User;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -19,7 +20,7 @@ public class UserController {
     @GetMapping("/users") // получение списка всех пользователей.
     public Collection<User> allUsers() {
         log.info("всего пользывателей {} " + users.size());
-        return users.values();
+        return users.values(); // я тут через колекшон получаю список , тоесть через колекцию HasMap беру только значения без ключей
 
 
     }
@@ -36,13 +37,13 @@ public class UserController {
     }
 
     @PutMapping("/users") // обновление пользователя.
-    public User changeUser(@Valid @RequestBody User user) throws NotIdExeption {
+    public User changeUser(@Valid @RequestBody User user) throws NotFound {
         if (users.containsKey(user.getId())) {
             users.put(user.getId(), user);
             log.info("обнавлён пользыватель " + user);
         } else {
             log.warn("ошибка обновления " + user + " не возможно изменить того чего нет");
-            throw new NotIdExeption("not found");
+            throw new NotFound();
         }
         return user;
     }

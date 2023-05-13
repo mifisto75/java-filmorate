@@ -15,7 +15,7 @@ public class User {
     @Email(message = "не коректо указанная почта")
     private String email;
     @NotBlank(message = "логин не может быть пустым")
-    @Pattern(regexp = "^[a-zA-Z0-9а-яА-Я._-]{1,50}", message = "логин не может содержать пробыл и быть длиней чем 50 символов")
+    @Pattern(regexp = "^[a-zA-Z0-9а-яА-Я._-]{1,}", message = "логин не может содержать пробыл")
     private String login; // логин пользователя
     private String name; // имя для отображения
 
