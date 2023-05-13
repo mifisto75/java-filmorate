@@ -12,14 +12,14 @@ import java.util.HashMap;
 @Slf4j
 @RestController
 public class UserController {
-    private HashMap<Integer, User> Users = new HashMap<>();
+    private HashMap<Integer, User> users = new HashMap<>();
 
     private int nextUserId = 1;
 
     @GetMapping("/users") // получение списка всех пользователей.
     public Collection<User> allUsers() {
-        log.info("всего пользывателей {} " + Users.size());
-        return Users.values();
+        log.info("всего пользывателей {} " + users.size());
+        return users.values();
 
 
     }
@@ -30,15 +30,15 @@ public class UserController {
             user.setName(user.getLogin());
         }
         user.setId(nextUserId++);
-        Users.put(user.getId(), user);
+        users.put(user.getId(), user);
         log.info("добавлен новый пользыватель " + user);
         return user;
     }
 
     @PutMapping("/users") // обновление пользователя.
     public User changeUser(@Valid @RequestBody User user) throws NotIdExeption {
-        if (Users.containsKey(user.getId())) {
-            Users.put(user.getId(), user);
+        if (users.containsKey(user.getId())) {
+            users.put(user.getId(), user);
             log.info("обнавлён пользыватель " + user);
         } else {
             log.warn("ошибка обновления " + user + " не возможно изменить того чего нет");
