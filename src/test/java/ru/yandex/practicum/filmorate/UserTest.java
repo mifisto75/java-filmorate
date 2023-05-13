@@ -77,7 +77,7 @@ public class UserTest {
     }
 
     @Test
-    void UpdateUseOkTest() throws Exception {
+    void updateUseOkTest() throws Exception {
         mockMvc.perform(
                 post("/users")
                         .content("{\n" +
@@ -102,7 +102,7 @@ public class UserTest {
     }
 
     @Test
-    void UpdateUseUnknownTest() throws Exception {
+    void updateUseUnknownTest() throws Exception {
         mockMvc.perform(
                 post("/users")
                         .content("{\n" +
