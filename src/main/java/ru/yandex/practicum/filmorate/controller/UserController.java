@@ -12,13 +12,13 @@ import java.util.HashMap;
 @Slf4j
 @RestController
 public class UserController {
-    private HashMap<Integer, User> users = new HashMap<>();
+    private HashMap<Integer, User> users = new HashMap<>() ;
 
     private int nextUserId = 1;
 
     @GetMapping("/users") // получение списка всех пользователей.
     public Collection<User> allUsers() {
-        log.info("всего пользывателей {} " + users.size());
+        log.info("всего пользывателей {} " + users.size()) ;
         return users.values();
 
 
@@ -31,7 +31,7 @@ public class UserController {
         }
         user.setId(nextUserId++);
         users.put(user.getId(), user);
-        log.info("добавлен новый пользыватель " + user);
+        log.info("добавлен новый пользыватель " + user) ;
         return user;
     }
 
@@ -44,6 +44,6 @@ public class UserController {
             log.warn("ошибка обновления " + user + " не возможно изменить того чего нет");
             throw new NotIdExeption("not found");
         }
-        return user;
+        return user ;
     }
 }
