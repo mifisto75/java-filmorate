@@ -6,7 +6,6 @@ import ru.yandex.practicum.filmorate.Exeptions.NotFound;
 import ru.yandex.practicum.filmorate.model.User;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
