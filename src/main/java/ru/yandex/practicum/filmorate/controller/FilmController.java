@@ -47,7 +47,7 @@ public class FilmController {
             }
         }else {
             log.warn("ошибка при обновлении фильма "+film + " не возможно изменить того чего нет");
-                throw new NotIdExeption("not found");
+                throw new NotIdExeption();
             }
         return film;
           }

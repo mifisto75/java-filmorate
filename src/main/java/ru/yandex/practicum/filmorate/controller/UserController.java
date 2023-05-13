@@ -39,7 +39,7 @@ public class UserController {
             log.info("обнавлён пользыватель "+user);
         }else {
             log.warn("ошибка обновления "+user + " не возможно изменить того чего нет");
-            throw new NotIdExeption("not found");
+            throw new NotIdExeption();
         }
         return user;
     }
