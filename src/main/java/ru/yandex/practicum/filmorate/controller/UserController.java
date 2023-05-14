@@ -6,7 +6,7 @@ import ru.yandex.practicum.filmorate.Exeptions.NotFound;
 import ru.yandex.practicum.filmorate.model.User;
 
 import javax.validation.Valid;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @Slf4j
@@ -17,9 +17,9 @@ public class UserController {
     private int nextUserId = 1;
 
     @GetMapping("/users") // получение списка всех пользователей.
-    public Collection<User> allUsers() {
-        log.info("всего пользывателей {} " + users.size());
-        return users.values(); // я тут через колекшон получаю список , тоесть через колекцию HasMap беру только значения без ключей
+    public ArrayList allUsers() {
+        log.info("всего пользователей {} " + users.size());
+        return  new ArrayList<>(users.values());
 
 
     }
@@ -31,7 +31,7 @@ public class UserController {
         }
         user.setId(nextUserId++);
         users.put(user.getId(), user);
-        log.info("добавлен новый пользыватель " + user);
+        log.info("добавлен новый пользователь " + user);
         return user;
     }
 
@@ -39,7 +39,7 @@ public class UserController {
     public User changeUser(@Valid @RequestBody User user) throws NotFound {
         if (users.containsKey(user.getId())) {
             users.put(user.getId(), user);
-            log.info("обнавлён пользыватель " + user);
+            log.info("обновлен пользователь " + user);
         } else {
             log.warn("ошибка обновления " + user + " не возможно изменить того чего нет");
             throw new NotFound();

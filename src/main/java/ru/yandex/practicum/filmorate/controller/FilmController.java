@@ -8,7 +8,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @Slf4j
@@ -19,15 +19,15 @@ public class FilmController {
     private int nextFilmId = 1;
 
     @GetMapping("/films") //получение всех фильмов.
-    public Collection<Film> allFilms() {
+    public ArrayList allFilms() {
         log.info("количество фильмов{}" + films.size());
-        return films.values(); //я тут через колекшон получаю список , тоесть через колекцию HasMap беру только значения без ключей
+        return new ArrayList(films.values());
     }
 
     @PostMapping("/films") // добавление фильма.
     public Film addFilm(@Valid @RequestBody Film film) throws BadRequest {
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
-            log.warn("ошибка при добaвлении фильма " + film + " старше «L'Arrivée d'un train en gare de la Ciotat» 1895 , нечего нет ");
+            log.warn("ошибка при добавлении фильма " + film + " старше «L'Arrivée d'un train en gare de la Ciotat» 1895 , нечего нет ");
             throw new BadRequest();
         } else {
             film.setId(nextFilmId++);

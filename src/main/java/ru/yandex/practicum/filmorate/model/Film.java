@@ -11,11 +11,11 @@ public class Film {
     private int id;
     @NotBlank(message = "название не может быть пустым")
     private String name;
-    @Size(max = 200, message = "превышен лемит в 200 символов")
+    @Size(max = 200, message = "превышен лимит в 200 символов")
     private String description;
 
-    private LocalDate releaseDate;// дата релиза
-    @Positive(message = "продолжительнсть не может быть отрицательной")
-    private int duration; // продолжительность фильса
+    private LocalDate releaseDate;
+    @Positive(message = "продолжительность не может быть отрицательной")
+    private int duration;
 
 }
