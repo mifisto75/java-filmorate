@@ -14,13 +14,13 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handlerNotFoundException(final NotFoundException e) {
-        return new ErrorResponse("Not Found Exception " , e.getMessage());
+        return new ErrorResponse("Not Found Exception ", e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handlerValidationException(final ValidationException e) {
-        return new ErrorResponse("Validation Exception",e.getMessage());
+        return new ErrorResponse("Validation Exception", e.getMessage());
     }
 
 }

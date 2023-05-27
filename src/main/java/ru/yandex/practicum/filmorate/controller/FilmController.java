@@ -14,13 +14,13 @@ import java.util.List;
 
 @RestController
 public class FilmController {
-    private final FilmStorage filmStorage ;
-    private final FilmService filmService ;
+    private final FilmStorage filmStorage;
+    private final FilmService filmService;
 
     @Autowired
-    public FilmController(FilmStorage filmStorage , FilmService filmService) {
+    public FilmController(FilmStorage filmStorage, FilmService filmService) {
         this.filmStorage = filmStorage;
-        this.filmService = filmService ;
+        this.filmService = filmService;
     }
 
     @GetMapping("/films") //получение всех фильмов.
@@ -28,6 +28,7 @@ public class FilmController {
         log.info("вызван метод allFilms - запрос на список всех фильмов");
         return filmStorage.allFilms();
     }
+
     @GetMapping("/films/{id}") //вернуть фильм по id.
     public Film getFilmId(@PathVariable Integer id) {
         log.info("вызван метод getFilmId - запрос на фильм с id " + id);
@@ -35,29 +36,32 @@ public class FilmController {
     }
 
     @PostMapping("/films") // добавление фильма.
-    public Film addFilm(@Valid @RequestBody Film film)  {
+    public Film addFilm(@Valid @RequestBody Film film) {
         log.info("вызван метод addFilm - запрос на добавление фильма " + film);
         return filmStorage.addFilm(film);
     }
 
     @PutMapping("/films") // обновление фильма.
-    public Film changeFilm(@Valid @RequestBody Film film)  {
+    public Film changeFilm(@Valid @RequestBody Film film) {
         log.info("вызван метод changeFilm - запрос на обновление фильма " + film);
         return filmStorage.changeFilm(film);
     }
+
     @PutMapping("/films/{id}/like/{userId}") //лайк для фильма
-    public void likeFilm(@PathVariable Integer id ,@PathVariable Integer userId)  {
-        log.info("вызван метод likeFilm - запрос на добовление лайк для фильма с id " + id + " от пользывателем c id " + userId );
+    public void likeFilm(@PathVariable Integer id, @PathVariable Integer userId) {
+        log.info("вызван метод likeFilm - запрос на добовление лайк для фильма с id " + id + " от пользывателем c id " + userId);
         filmService.likeFilm(id, userId);
     }
+
     @DeleteMapping("/films/{id}/like/{userId}") //убрать лайк для фильма
-    public void deletLikeFilm(@PathVariable Integer id ,@PathVariable Integer userId)  {
+    public void deletLikeFilm(@PathVariable Integer id, @PathVariable Integer userId) {
         log.info("вызван метод deletLikeFilm - запрос на удаление лайк для фильма с id " + id + " от пользывателем c id " + userId);
         filmService.deletLikeFilm(id, userId);
     }
+
     @GetMapping("/films/popular")
-        public List<Film> popularFilm(@RequestParam(name = "count" , defaultValue = "10")Integer count){ // фильмы по популярности
+    public List<Film> popularFilm(@RequestParam(name = "count", defaultValue = "10") Integer count) { // фильмы по популярности
         log.info("вызван метод popularFilm - запрос на писок фильмов по популярности");
-        return filmService.popularFilm(count) ;
+        return filmService.popularFilm(count);
     }
 }

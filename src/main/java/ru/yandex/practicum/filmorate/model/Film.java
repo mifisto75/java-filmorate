@@ -11,7 +11,7 @@ import java.util.HashSet;
 public class Film {
     private int id;
 
-    private HashSet<Integer> likes  = new HashSet<>();
+    private HashSet<Integer> likes = new HashSet<>();
     @NotBlank(message = "название не может быть пустым")
     private String name;
     @Size(max = 200, message = "превышен лимит в 200 символов")
