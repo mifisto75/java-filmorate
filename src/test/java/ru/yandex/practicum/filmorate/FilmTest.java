@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.yandex.practicum.filmorate.Exeptions.ValidationException;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -75,7 +76,7 @@ public class FilmTest {
                                 "  \"duration\": 200\n" +
                                 "}")
                         .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().is4xxClientError());
+        ).andExpect(status().isBadRequest());
     }
 
     @Test
