@@ -15,11 +15,11 @@ public class InMemoryUserStorage implements UserStorage {
     private int nextUserId = 1;
 
 
-    public ArrayList allUsers() {// получение списка всех пользователей.
+    public ArrayList allUsers() { // получение списка всех пользователей.
         return new ArrayList<>(users.values());
     }
 
-    public User addUser(User user) {// создание пользователя.
+    public User addUser(User user) { // создание пользователя.
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
@@ -28,7 +28,7 @@ public class InMemoryUserStorage implements UserStorage {
         return user;
     }
 
-    public User changeUser(User user) {// обновление пользователя.
+    public User changeUser(User user) { // обновление пользователя.
         if (!users.containsKey(user.getId())) {
             throw new NotFoundException("по вашему id не был найден пользыатель");
         }
