@@ -39,9 +39,9 @@ public class UserService {
     //DELETE /users/{id}/friends/{friendId} — удаление из друзей.
     public void deleteFriends(int id, int friendId) {
         User bosUser = userStorage.getUserId(id);
-        User NotFriend = userStorage.getUserId(friendId);
+        User notFriend = userStorage.getUserId(friendId);
         if (bosUser != null) {
-            if (NotFriend != null) {
+            if (notFriend != null) {
                 if (userStorage.getUserId(id).getFriends().remove(friendId)) {
                     userStorage.getUserId(friendId).getFriends().remove(id);
                 } else {
