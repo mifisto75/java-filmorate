@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
-import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -13,37 +12,36 @@ import java.util.List;
 @Slf4j
 @RestController
 public class FilmController {
-    private final FilmStorage filmStorage;
+
     private final FilmService filmService;
 
     @Autowired
-    public FilmController(FilmStorage filmStorage, FilmService filmService) {
-        this.filmStorage = filmStorage;
+    public FilmController(FilmService filmService) {
         this.filmService = filmService;
     }
 
     @GetMapping("/films") //получение всех фильмов.
     public List allFilms() {
         log.info("вызван метод allFilms - запрос на список всех фильмов");
-        return filmStorage.allFilms();
+        return filmService.filmStorage.allFilms();
     }
 
     @GetMapping("/films/{id}") //вернуть фильм по id.
     public Film getFilmId(@PathVariable Integer id) {
         log.info("вызван метод getFilmId - запрос на фильм с id " + id);
-        return filmStorage.getFilmId(id);
+        return filmService.filmStorage.getFilmId(id);
     }
 
     @PostMapping("/films") // добавление фильма.
     public Film addFilm(@Valid @RequestBody Film film) {
         log.info("вызван метод addFilm - запрос на добавление фильма " + film);
-        return filmStorage.addFilm(film);
+        return filmService.filmStorage.addFilm(film);
     }
 
     @PutMapping("/films") // обновление фильма.
     public Film changeFilm(@Valid @RequestBody Film film) {
         log.info("вызван метод changeFilm - запрос на обновление фильма " + film);
-        return filmStorage.changeFilm(film);
+        return filmService.filmStorage.changeFilm(film);
     }
 
     @PutMapping("/films/{id}/like/{userId}") //лайк для фильма

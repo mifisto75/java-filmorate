@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
-    private UserStorage userStorage;
+    public UserStorage userStorage;
 
     public UserService(UserStorage userStorage) {
         this.userStorage = userStorage;

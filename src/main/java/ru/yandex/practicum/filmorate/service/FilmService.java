@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class FilmService {
-    private FilmStorage filmStorage;
+    public FilmStorage filmStorage;
     private UserStorage userStorage;
 
     public FilmService(FilmStorage filmStorage, UserStorage userStorage) {
@@ -24,9 +24,10 @@ public class FilmService {
 
     //PUT /films/{id}/like/{userId} — пользователь ставит лайк фильму.
     public void likeFilm(int id, int userId) {
-        if (filmStorage.getFilmId(id) != null) {
-            if (userStorage.getUserId(userId) != null) {
-                filmStorage.getFilmId(id).getLikes().add(userId);
+        Film film = filmStorage.getFilmId(id);
+        if (film != null) {
+            if (film != null) {
+                film.getLikes().add(userId);
             } else {
                 throw new NotFoundException("такого пользователя нет. не верный id" + id);
             }
@@ -39,7 +40,7 @@ public class FilmService {
     public void deleteLikeFilm(int id, int userId) {
         Film film = filmStorage.getFilmId(id);
         if (film != null) {
-            if (! film.getLikes().remove(userId)) {
+            if (!film.getLikes().remove(userId)) {
                 throw new NotFoundException("такой пользователь не ставил лайк. не верный id " + id);
             }
         } else {
@@ -54,7 +55,6 @@ public class FilmService {
         }
         return filmStorage.allFilms().stream().sorted((x, y) -> y.getLikes().size() - x.getLikes().size())
                 .limit(count).collect(Collectors.toList());
-
     }
 
 }
