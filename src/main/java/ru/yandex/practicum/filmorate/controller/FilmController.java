@@ -11,7 +11,6 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
-
 @RestController
 public class FilmController {
     private final FilmStorage filmStorage;
@@ -56,7 +55,7 @@ public class FilmController {
     @DeleteMapping("/films/{id}/like/{userId}") //убрать лайк для фильма
     public void deletLikeFilm(@PathVariable Integer id, @PathVariable Integer userId) {
         log.info("вызван метод deletLikeFilm - запрос на удаление лайк для фильма с id " + id + " от пользывателем c id " + userId);
-        filmService.deletLikeFilm(id, userId);
+        filmService.deleteLikeFilm(id, userId);
     }
 
     @GetMapping("/films/popular")

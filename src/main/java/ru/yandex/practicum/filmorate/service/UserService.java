@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -20,11 +21,11 @@ public class UserService {
     }
 
     //PUT /users/{id}/friends/{friendId} — добавление в друзья.
-    public void addFrends(int id, int frendId) {
+    public void addFriends(int id, int frendId) {
         if (userStorage.getUserId(id) != null) {
             if (userStorage.getUserId(frendId) != null) {
-                userStorage.getUserId(id).getFreands().add(frendId);
-                userStorage.getUserId(frendId).getFreands().add(id);
+                userStorage.getUserId(id).getFriends().add(frendId);
+                userStorage.getUserId(frendId).getFriends().add(id);
             } else {
                 throw new NotFoundException("пользывателя под id " + frendId + "нет");
             }
@@ -36,19 +37,19 @@ public class UserService {
     }
 
     //DELETE /users/{id}/friends/{friendId} — удаление из друзей.
-    public void deleteFrends(int id, int frendId) {
-        if (userStorage.getUserId(id) != null) {
-            if (userStorage.getUserId(frendId) != null) {
-                if (userStorage.getUserId(id).getFreands().contains(frendId)) {
-                    userStorage.getUserId(id).getFreands().remove(frendId);
-                    userStorage.getUserId(frendId).getFreands().remove(id);
+    public void deleteFriends(int id, int friendId) {
+        User bosUser = userStorage.getUserId(id);
+        User NotFriend = userStorage.getUserId(friendId);
+        if (bosUser != null) {
+            if (NotFriend != null) {
+                if (userStorage.getUserId(id).getFriends().remove(friendId)) {
+                    userStorage.getUserId(friendId).getFriends().remove(id);
                 } else {
-                    throw new NotFoundException("у вас и так нет этого пользователя в друзьях " + frendId);
+                    throw new NotFoundException("у вас и так нет этого пользователя в друзьях " + friendId);
                 }
             } else {
-                throw new NotFoundException("пользователя которого вы хотите удалить нету " + frendId);
+                throw new NotFoundException("пользователя которого вы хотите удалить нету " + friendId);
             }
-
         } else {
             throw new NotFoundException("ваш id не верен " + id);
         }
@@ -57,37 +58,34 @@ public class UserService {
 
     //GET /users/{id}/friends — возвращаем список пользователей, являющихся его друзьями.
     public List<User> getListUser(int id) {
-        List<User> ferndUser = new ArrayList<>();
-        if (userStorage.getUserId(id) != null) {
-            if (userStorage.getUserId(id).getFreands() != null) {
-                for (Integer users : userStorage.getUserId(id).getFreands()) {
-                    ferndUser.add(userStorage.getUserId(users));
-                }
+        User user = userStorage.getUserId(id);
+        List<User> friendUsers = new ArrayList<>();
+        if (user != null) {
+            if (user.getFriends().size() != 0) {
             }
         } else {
             throw new NotFoundException("ваш id не верен " + id);
         }
-        return ferndUser;
+        return friendUsers = user.getFriends().stream().map(u -> userStorage.getUserId(u)).collect(Collectors.toList());
     }
 
     //GET /users/{id}/friends/common/{otherId} — список друзей, общих с другим пользователем.
     public List<User> getMutualFriends(int id, int otherId) {
+        User bosUser = userStorage.getUserId(id);
+        User friend = userStorage.getUserId(otherId);
         List<User> mutualFriends = new ArrayList<>();
-        if (userStorage.getUserId(id) != null) {
-            if (userStorage.getUserId(otherId) != null) {
-                Set<Integer> userFrends = new HashSet<>(userStorage.getUserId(id).getFreands());
-                userFrends.retainAll(userStorage.getUserId(otherId).getFreands());
-                for (Integer user : userFrends) {
-                    mutualFriends.add(userStorage.getUserId(user));
-                }
+        Set<Integer> userFriends;
+        if (bosUser != null) {
+            if (friend != null) {
+                userFriends = new HashSet<>(bosUser.getFriends());
+                userFriends.retainAll(friend.getFriends());
             } else {
                 throw new NotFoundException("вы указали неверный id пользователя " + id);
             }
-
         } else {
             throw new NotFoundException("ваш id не верен " + id);
         }
-        return mutualFriends;
+        return mutualFriends = userFriends.stream().map(x -> userStorage.getUserId(x)).collect(Collectors.toList());
     }
 
 }

@@ -12,7 +12,6 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Slf4j
 @RestController
 public class UserController {
@@ -52,14 +51,14 @@ public class UserController {
     @PutMapping("/users/{id}/friends/{friendId}") // добавить в друзья
     public void addFrends(@PathVariable Integer id, @PathVariable Integer friendId) {
         log.info("вызван метод addFrends - запрос на добовление в друзья пользывателем c id " + id + " пользывателя с id " + friendId);
-        userService.addFrends(id, friendId);
+        userService.addFriends(id, friendId);
 
     }
 
     @DeleteMapping("/users/{id}/friends/{friendId}") // удалить из друзей
     public void deleteFrends(@PathVariable Integer id, @PathVariable Integer friendId) {
         log.info("вызван метод deleteFrends - запрос на удаление из друзей пользывателем c id " + id + " пользывателя с id " + friendId);
-        userService.deleteFrends(id, friendId);
+        userService.deleteFriends(id, friendId);
     }
 
     @GetMapping("/users/{id}/friends") // список друзей

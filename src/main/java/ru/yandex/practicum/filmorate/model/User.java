@@ -6,12 +6,13 @@ import lombok.Data;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Set;
 
 
 @Data
 public class User {
     private int id;
-    private HashSet<Integer> freands = new HashSet<>();
+    private Set<Integer> friends = new HashSet<>();
 
     @NotBlank(message = "почта не может  быть пустой")
     @Email(message = "не корректно указанная почта")

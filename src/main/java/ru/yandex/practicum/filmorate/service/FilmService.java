@@ -36,10 +36,10 @@ public class FilmService {
     }
     //DELETE /films/{id}/like/{userId} — пользователь удаляет лайк.
 
-    public void deletLikeFilm(int id, int userId) {
-        if (filmStorage.getFilmId(id) != null) {
-            if (filmStorage.getFilmId(id).getLikes().contains(userId)) {
-                filmStorage.getFilmId(id).getLikes().remove(userId);
+    public void deleteLikeFilm(int id, int userId) {
+        Film film = filmStorage.getFilmId(id);
+        if (film != null) {
+            if (film.getLikes().remove(userId)) {
             } else {
                 throw new NotFoundException("такой пользователь не ставил лайк. не верный id " + id);
             }
