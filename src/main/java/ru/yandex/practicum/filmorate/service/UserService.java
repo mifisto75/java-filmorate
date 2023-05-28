@@ -61,13 +61,13 @@ public class UserService {
         User user = userStorage.getUserId(id);
         List<User> friendUsers = new ArrayList<>();
         if (user != null) {
-            if (user.getFriends().size() != 0) {
+            if (user.getFriends().size() == 0) {
+                throw new NotFoundException("ваш id не верен " + id);
             }
-        } else {
-            throw new NotFoundException("ваш id не верен " + id);
         }
-        return friendUsers = user.getFriends().stream().map(u -> userStorage.getUserId(u)).collect(Collectors.toList());
-    }
+            return friendUsers = user.getFriends().stream().map(u -> userStorage.getUserId(u)).collect(Collectors.toList());
+        }
+
 
     //GET /users/{id}/friends/common/{otherId} — список друзей, общих с другим пользователем.
     public List<User> getMutualFriends(int id, int otherId) {

@@ -39,8 +39,7 @@ public class FilmService {
     public void deleteLikeFilm(int id, int userId) {
         Film film = filmStorage.getFilmId(id);
         if (film != null) {
-            if (film.getLikes().remove(userId)) {
-            } else {
+            if (! film.getLikes().remove(userId)) {
                 throw new NotFoundException("такой пользователь не ставил лайк. не верный id " + id);
             }
         } else {
