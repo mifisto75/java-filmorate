@@ -1,58 +1,64 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.Exeptions.NotFound;
-import ru.yandex.practicum.filmorate.Exeptions.BadRequest;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 @Slf4j
-
 @RestController
 public class FilmController {
-    private HashMap<Integer, Film> films = new HashMap<>();
-    private int nextFilmId = 1;
+
+    private final FilmService filmService;
+
+    @Autowired
+    public FilmController(FilmService filmService) {
+        this.filmService = filmService;
+    }
 
     @GetMapping("/films") //получение всех фильмов.
-    public ArrayList allFilms() {
-        log.info("количество фильмов{}" + films.size());
-        return new ArrayList(films.values());
+    public List allFilms() {
+        log.info("вызван метод allFilms - запрос на список всех фильмов");
+        return filmService.filmStorage.allFilms();
+    }
+
+    @GetMapping("/films/{id}") //вернуть фильм по id.
+    public Film getFilmId(@PathVariable Integer id) {
+        log.info("вызван метод getFilmId - запрос на фильм с id " + id);
+        return filmService.filmStorage.getFilmId(id);
     }
 
     @PostMapping("/films") // добавление фильма.
-    public Film addFilm(@Valid @RequestBody Film film) throws BadRequest {
-        if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
-            log.warn("ошибка при добавлении фильма " + film + " старше «L'Arrivée d'un train en gare de la Ciotat» 1895 , нечего нет ");
-            throw new BadRequest();
-        } else {
-            film.setId(nextFilmId++);
-            films.put(film.getId(), film);
-            log.info("добавлен новый фильм " + film);
-        }
-        return film;
+    public Film addFilm(@Valid @RequestBody Film film) {
+        log.info("вызван метод addFilm - запрос на добавление фильма " + film);
+        return filmService.filmStorage.addFilm(film);
     }
 
     @PutMapping("/films") // обновление фильма.
-    public Film changeFilm(@Valid @RequestBody Film film) throws NotFound, BadRequest {
-        if (films.containsKey(film.getId())) {
-            if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
-                log.warn("ошибка при добавлении фильма " + film + " старше «L'Arrivée d'un train en gare de la Ciotat» 1895 , нечего нет ");
-                throw new BadRequest();
-            } else {
-                films.put(film.getId(), film);
-                log.info("фильм обновлён " + film);
-            }
-        } else {
-            log.warn("ошибка при обновлении фильма " + film + " не возможно изменить того чего нет");
-            throw new NotFound();
-        }
-        return film;
+    public Film changeFilm(@Valid @RequestBody Film film) {
+        log.info("вызван метод changeFilm - запрос на обновление фильма " + film);
+        return filmService.filmStorage.changeFilm(film);
     }
 
+    @PutMapping("/films/{id}/like/{userId}") //лайк для фильма
+    public void likeFilm(@PathVariable Integer id, @PathVariable Integer userId) {
+        log.info("вызван метод likeFilm - запрос на добовление лайк для фильма с id " + id + " от пользывателем c id " + userId);
+        filmService.likeFilm(id, userId);
+    }
 
+    @DeleteMapping("/films/{id}/like/{userId}") //убрать лайк для фильма
+    public void deletLikeFilm(@PathVariable Integer id, @PathVariable Integer userId) {
+        log.info("вызван метод deletLikeFilm - запрос на удаление лайк для фильма с id " + id + " от пользывателем c id " + userId);
+        filmService.deleteLikeFilm(id, userId);
+    }
+
+    @GetMapping("/films/popular")
+    public List<Film> popularFilm(@RequestParam(name = "count", defaultValue = "10") Integer count) { // фильмы по популярности
+        log.info("вызван метод popularFilm - запрос на писок фильмов по популярности");
+        return filmService.popularFilm(count);
+    }
 }

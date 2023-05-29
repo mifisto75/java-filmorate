@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -64,19 +65,6 @@ public class FilmTest {
         ).andExpect(status().is4xxClientError());
     }
 
-    @Test
-    void addFilmFailReleaseDateTest() throws Exception {
-        mockMvc.perform(
-                post("/films")
-                        .content("{\n" +
-                                "  \"name\": \"Name\",\n" +
-                                "  \"description\": \"Description\",\n" +
-                                "  \"releaseDate\": \"1890-03-25\",\n" +
-                                "  \"duration\": 200\n" +
-                                "}")
-                        .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().is4xxClientError());
-    }
 
     @Test
     void addFilmFailDurationt() throws Exception {

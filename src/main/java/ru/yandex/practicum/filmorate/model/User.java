@@ -1,16 +1,19 @@
 package ru.yandex.practicum.filmorate.model;
 
 
-import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+
 
 @Data
-@Builder
 public class User {
     private int id;
+    private Set<Integer> friends = new HashSet<>();
+
     @NotBlank(message = "почта не может  быть пустой")
     @Email(message = "не корректно указанная почта")
     private String email;
