@@ -23,25 +23,25 @@ public class FilmController {
     @GetMapping("/films") //получение всех фильмов.
     public List allFilms() {
         log.info("вызван метод allFilms - запрос на список всех фильмов");
-        return filmService.filmStorage.allFilms();
+        return filmService.allFilms();
     }
 
     @GetMapping("/films/{id}") //вернуть фильм по id.
     public Film getFilmId(@PathVariable Integer id) {
         log.info("вызван метод getFilmId - запрос на фильм с id " + id);
-        return filmService.filmStorage.getFilmId(id);
+        return filmService.getFilmId(id);
     }
 
     @PostMapping("/films") // добавление фильма.
     public Film addFilm(@Valid @RequestBody Film film) {
         log.info("вызван метод addFilm - запрос на добавление фильма " + film);
-        return filmService.filmStorage.addFilm(film);
+        return filmService.addFilm(film);
     }
 
     @PutMapping("/films") // обновление фильма.
     public Film changeFilm(@Valid @RequestBody Film film) {
         log.info("вызван метод changeFilm - запрос на обновление фильма " + film);
-        return filmService.filmStorage.changeFilm(film);
+        return filmService.changeFilm(film);
     }
 
     @PutMapping("/films/{id}/like/{userId}") //лайк для фильма
@@ -58,7 +58,7 @@ public class FilmController {
 
     @GetMapping("/films/popular")
     public List<Film> popularFilm(@RequestParam(name = "count", defaultValue = "10") Integer count) { // фильмы по популярности
-        log.info("вызван метод popularFilm - запрос на писок фильмов по популярности");
+        log.info("вызван метод popularFilm - запрос на писок фильмов по популярности с count " +count);
         return filmService.popularFilm(count);
     }
 }
