@@ -14,10 +14,12 @@ import java.util.List;
 @RestController
 public class GenreController {
     private final GenreService genreService;
+
     @Autowired
     public GenreController(GenreService genreService) {
         this.genreService = genreService;
     }
+
     @GetMapping("/genres")
     public List<Genre> allGenre() {
         log.info("вызван метод allGenre - запрос на список всех aGenre");
@@ -26,7 +28,7 @@ public class GenreController {
 
     @GetMapping("/genres/{id}")
     public Genre getGenreId(@PathVariable int id) {
-        log.info("вызван метод getGenreId - запрос на Genre c Id "+ id);
+        log.info("вызван метод getGenreId - запрос на Genre c Id " + id);
         return genreService.genreDao.getGenreId(id);
     }
 }
