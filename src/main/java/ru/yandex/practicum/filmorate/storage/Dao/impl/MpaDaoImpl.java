@@ -19,13 +19,12 @@ import java.util.List;
 import static java.lang.String.format;
 @Service
 @Component
-public class MpaDaoImpl implements MpaDao
-        {
+public class MpaDaoImpl implements MpaDao {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
     public MpaDaoImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate ;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
@@ -40,7 +39,6 @@ public class MpaDaoImpl implements MpaDao
     @Override
     public List<Mpa> allMpa() {
         return  new ArrayList<>( jdbcTemplate.query("SELECT * FROM mpa_ratings ORDER BY rating_id", new MpaMapper()));
-
     }
 
     private static class MpaMapper implements RowMapper<Mpa> {
