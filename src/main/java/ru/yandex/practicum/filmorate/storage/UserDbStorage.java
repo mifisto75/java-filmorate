@@ -40,7 +40,7 @@ public class UserDbStorage implements UserStorage {
         return jdbcTemplate.queryForObject(format("SELECT * FROM users WHERE email='%s'", user.getEmail()), new UserMapper());
     }
 
-    public User changeUser(User user) {// обновление пользователя.
+    public User changeUser(User user) { // обновление пользователя.
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
@@ -49,11 +49,10 @@ public class UserDbStorage implements UserStorage {
         return getUserId(user.getId());
     }
 
-    public User getUserId(int id) {// выдача юзера по id
-        try{
-            User user = jdbcTemplate.queryForObject(format("SELECT * FROM users WHERE user_id=%d", id), new UserMapper());
+    public User getUserId(int id) { // выдача юзера по id
+        try {User user = jdbcTemplate.queryForObject(format("SELECT * FROM users WHERE user_id=%d", id), new UserMapper());
             return user;
-        }catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             throw new NotFoundException("по вашему id " + id + " не был найден пользыатель ");
         }
     }
