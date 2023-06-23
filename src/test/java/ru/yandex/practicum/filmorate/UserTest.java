@@ -26,6 +26,7 @@ public class UserTest {
     private MockMvc mockMvc;
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
     @BeforeEach
     public void before() {
         jdbcTemplate.update("DROP TABLE IF EXISTS film_like_list CASCADE;\n" +
