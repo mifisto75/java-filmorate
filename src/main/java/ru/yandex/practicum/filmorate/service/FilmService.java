@@ -40,7 +40,7 @@ public class FilmService {
         return list;
     }
 
-    public Film addFilm(Film film) {//добавить фильм
+    public Film addFilm(Film film) { //добавить фильм
         Film fil = filmStorage.addFilm(film);
         filmStorage.addFilmGenres(fil.getId(), film.getGenres());
         fil.setGenres(filmStorage.getFilmGenres(fil.getId()));
