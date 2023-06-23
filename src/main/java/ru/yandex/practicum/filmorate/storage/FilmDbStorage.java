@@ -38,7 +38,7 @@ public class FilmDbStorage implements FilmStorage {
 
     }
 
-    public Film addFilm(Film film) {// добавление фильма.
+    public Film addFilm(Film film) { // добавление фильма.
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
             throw new ValidationException("вы указали неверную дату. фильм не может быть старше 1895.12.28");
         }
@@ -46,8 +46,8 @@ public class FilmDbStorage implements FilmStorage {
                         " VALUES(?, ?, ?, ?, ?)",
                 film.getName(), film.getDescription(), film.getReleaseDate(), film.getDuration(), film.getMpa().getId());
         return jdbcTemplate.queryForObject(format("SELECT * FROM films WHERE name='%s'" +
-                        " AND description='%s' AND rating_id=%d "
-                , film.getName(), film.getDescription(), film.getMpa().getId()), new FilmMapper());
+                        " AND description='%s' AND rating_id=%d ",
+                film.getName(), film.getDescription(), film.getMpa().getId()), new FilmMapper());
 
     }
 
@@ -68,7 +68,7 @@ public class FilmDbStorage implements FilmStorage {
         return getFilmId(film.getId());
     }
 
-    public Film getFilmId(int id) {//фильм по id
+    public Film getFilmId(int id) { //фильм по id
         try {
             return jdbcTemplate.queryForObject(format("SELECT * FROM films WHERE film_id=%d", id), new FilmMapper());
         } catch (EmptyResultDataAccessException e) {
