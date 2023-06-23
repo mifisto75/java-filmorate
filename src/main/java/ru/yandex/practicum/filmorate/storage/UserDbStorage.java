@@ -26,19 +26,18 @@ public class UserDbStorage implements UserStorage {
     }
 
     @Override
-    public ArrayList<User> allUsers() {// получение списка всех пользователей.
+    public ArrayList<User> allUsers() { // получение списка всех пользователей.
         return new ArrayList<>(jdbcTemplate.query("SELECT * FROM users", new UserMapper()));
     }
 
     @Override
-    public User addUser(User user) {// создание пользователя.
+    public User addUser(User user) { // создание пользователя.
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
         jdbcTemplate.update("INSERT INTO users (email , login , name , birthday) VALUES (? , ? , ? , ?)",
                 user.getEmail(), user.getLogin(), user.getName(), user.getBirthday());
-        return jdbcTemplate.queryForObject(format("SELECT * FROM users WHERE email='%s'", user.getEmail())
-                , new UserMapper());
+        return jdbcTemplate.queryForObject(format("SELECT * FROM users WHERE email='%s'", user.getEmail()), new UserMapper());
     }
 
     public User changeUser(User user) {// обновление пользователя.
@@ -51,10 +50,10 @@ public class UserDbStorage implements UserStorage {
     }
 
     public User getUserId(int id) {// выдача юзера по id
-        try {
+        try{
             User user = jdbcTemplate.queryForObject(format("SELECT * FROM users WHERE user_id=%d", id), new UserMapper());
             return user;
-        } catch (EmptyResultDataAccessException e) {
+        }catch (EmptyResultDataAccessException e) {
             throw new NotFoundException("по вашему id " + id + " не был найден пользыатель ");
         }
     }
@@ -70,10 +69,7 @@ public class UserDbStorage implements UserStorage {
             user.setBirthday(rs.getDate("birthday").toLocalDate());
             return user;
         }
-
-
     }
-
 }
 
 
