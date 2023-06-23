@@ -50,7 +50,7 @@ public class UserDbStorage implements UserStorage {
     }
 
     public User getUserId(int id) { // выдача юзера по id
-        try {User user = jdbcTemplate.queryForObject(format("SELECT * FROM users WHERE user_id=%d", id), new UserMapper());
+        try { User user = jdbcTemplate.queryForObject(format("SELECT * FROM users WHERE user_id=%d", id), new UserMapper());
             return user;
         } catch (EmptyResultDataAccessException e) {
             throw new NotFoundException("по вашему id " + id + " не был найден пользыатель ");
