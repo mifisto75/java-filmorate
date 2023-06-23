@@ -13,12 +13,12 @@ import java.util.List;
 @Slf4j
 @RestController
 public class MpaController {
-    private final MpaService mpaService ;
+    private final MpaService mpaService;
 
 
     @Autowired
-    public MpaController(MpaService mpaService){
-        this.mpaService = mpaService ;
+    public MpaController(MpaService mpaService) {
+        this.mpaService = mpaService;
     }
 
     @GetMapping("/mpa")
