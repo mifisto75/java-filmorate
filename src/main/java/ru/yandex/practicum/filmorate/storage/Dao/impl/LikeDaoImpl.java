@@ -33,13 +33,14 @@ public class LikeDaoImpl implements LikeDao {
     EmptyResultDataAccessException e) {
         throw new NotFoundException("не верный  id пользывателя или фильма");
     }
-
     }
+
     @Override
     public void deleteLike(int filmId, int userId) {
         try {
-        int i = jdbcTemplate.queryForObject(format("SELECT film_id + user_id FROM film_like_list WHERE film_id=%d AND user_id=%d"
-                ,filmId, userId),Integer.class); //клас костыль который выбрасывает исключение NotFoundException если в базе пусто
+        int i = jdbcTemplate.queryForObject(format(
+                "SELECT film_id + user_id FROM film_like_list WHERE film_id=%d AND user_id=%d",filmId, userId),Integer.class);
+        //клас костыль который выбрасывает исключение NotFoundException если в базе пусто
         } catch (
                 EmptyResultDataAccessException e) {
             throw new NotFoundException("нечего удолять");
@@ -48,7 +49,7 @@ public class LikeDaoImpl implements LikeDao {
     }
 
     @Override
-    public List<Integer> sizeLikeFilmList(int count){
+    public List<Integer> sizeLikeFilmList(int count) {
         if (count < 1) {
             throw new ValidationException("слишком малое число. count должен быть хотябы 1 а не " + count);
         }
