@@ -58,7 +58,7 @@ public class FilmController {
 
     @GetMapping("/films/popular")
     public List<Film> popularFilm(@RequestParam(name = "count", defaultValue = "10") Integer count) { // фильмы по популярности
-        log.info("вызван метод popularFilm - запрос на писок фильмов по популярности с count " +count);
+        log.info("вызван метод popularFilm - запрос на писок фильмов по популярности с count " + count);
         return filmService.popularFilm(count);
     }
 }
