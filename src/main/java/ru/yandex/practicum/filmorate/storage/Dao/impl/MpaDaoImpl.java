@@ -38,7 +38,7 @@ public class MpaDaoImpl implements MpaDao {
 
     @Override
     public List<Mpa> allMpa() {
-        return  new ArrayList<>( jdbcTemplate.query("SELECT * FROM mpa_ratings ORDER BY rating_id", new MpaMapper()));
+        return  new ArrayList<>(jdbcTemplate.query("SELECT * FROM mpa_ratings ORDER BY rating_id", new MpaMapper()));
     }
 
     private static class MpaMapper implements RowMapper<Mpa> {
