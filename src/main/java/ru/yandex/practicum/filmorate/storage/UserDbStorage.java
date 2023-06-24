@@ -55,7 +55,7 @@ public class UserDbStorage implements UserStorage {
             return user;
     }
 
-    public void userExistenceCheck (int id){ // приметивная проверка на наличие пользывателя в бд
+    public void userExistenceCheck(int id){ // приметивная проверка на наличие пользывателя в бд
         try {
             User user = jdbcTemplate.queryForObject(format("SELECT * FROM users WHERE user_id=%d", id), new UserMapper());
         } catch (EmptyResultDataAccessException e) {
