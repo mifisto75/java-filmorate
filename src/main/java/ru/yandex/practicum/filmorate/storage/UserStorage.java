@@ -14,7 +14,7 @@ public interface UserStorage {
 
      User getUserId(int id);// выдача юзера по id
 
-    void userExistenceCheck (int id);// проверка наличия в бд
+    void userExistenceCheck(int id);// проверка наличия в бд
 
     //есть гиганское желание переименовать этот клас как UserDao а имплементирующий его UserDaoIml
     // и раскидать их по пакетам . соответственно и с калсоми фильмов
