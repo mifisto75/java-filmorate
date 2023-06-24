@@ -21,9 +21,10 @@ public class UserService {
     }
 
     //PUT /users/{id}/friends/{friendId} — добавление в друзья.
-    public void addFriends(int id, int frendId) {
-        boolean status = userStorage.getUserId(frendId).getFriends().contains(id);
-        friendListDao.addFriends(id, frendId, status);
+    public void addFriends(int id, int friendId) {
+        userStorage.userExistenceCheck(id);
+        boolean status = userStorage.getUserId(friendId).getFriends().contains(id);
+        friendListDao.addFriends(id, friendId, status);
     }
 
     //DELETE /users/{id}/friends/{friendId} — удаление из друзей.
@@ -32,18 +33,17 @@ public class UserService {
     }
 
     //GET /users/{id}/friends — возвращаем список пользователей, являющихся его друзьями.
-    public List<User> getListUser(int id) { // првевращаем список id заявок в список юзеров
-        List<User> friends = friendListDao.chekFienda(id).stream()
+    public List<User> getUserFriends(int id) { // првевращаем список id заявок в список юзеров
+        return friendListDao.checkFienda(id).stream()
                 .mapToInt(Integer::valueOf)
                 .mapToObj(userStorage::getUserId)
                 .collect(Collectors.toList());
-        return friends;
     }
 
     //GET /users/{id}/friends/common/{otherId} — список друзей, общих с другим пользователем.
     public List<User> getMutualFriends(int id, int otherId) {
-        List<User> user1 = getListUser(id);
-        List<User> user2 = getListUser(otherId);
+        List<User> user1 = getUserFriends(id);
+        List<User> user2 = getUserFriends(otherId);
         user1.retainAll(user2);
         return user1;
     }

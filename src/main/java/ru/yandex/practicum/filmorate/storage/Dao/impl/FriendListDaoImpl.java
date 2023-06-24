@@ -36,14 +36,14 @@ public class FriendListDaoImpl implements FriendListDao {
         }
     }
 
-    public List<Integer> chekFienda(int id) {
+    public List<Integer> checkFienda(int id) {
         try {
-            List<Integer> chekFiendaList = jdbcTemplate.query(format("SELECT from_user_id, to_user_id, boolean_status "
+            List<Integer> checkFiendaList = jdbcTemplate.query(format("SELECT from_user_id, to_user_id, boolean_status "
                             + "FROM user_friend_list WHERE to_user_id=%d", id), new FriendMapper())
                     .stream()
                     .map(FriendList::getFromUserId)//выбираем только тех кто отправил нам запрос
                     .collect(Collectors.toList());
-            return chekFiendaList;
+            return checkFiendaList;
         } catch (EmptyResultDataAccessException e) {
             throw new NotFoundException("не верный id пользывателя " + id);
         }

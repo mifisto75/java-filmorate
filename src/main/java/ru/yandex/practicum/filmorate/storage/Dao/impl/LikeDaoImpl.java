@@ -43,7 +43,7 @@ public class LikeDaoImpl implements LikeDao {
         //клас костыль который выбрасывает исключение NotFoundException если в базе пусто
         } catch (
                 EmptyResultDataAccessException e) {
-            throw new NotFoundException("нечего удолять");
+            throw new NotFoundException("нечего удалять");
         }
             jdbcTemplate.update("DELETE FROM film_like_list WHERE film_id=? AND user_id=?", filmId, userId);
     }

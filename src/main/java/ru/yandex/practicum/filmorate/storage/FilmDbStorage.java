@@ -45,10 +45,13 @@ public class FilmDbStorage implements FilmStorage {
         jdbcTemplate.update("INSERT INTO films (name, description, release_date, duration, rating_id )" +
                         " VALUES(?, ?, ?, ?, ?)",
                 film.getName(), film.getDescription(), film.getReleaseDate(), film.getDuration(), film.getMpa().getId());
-        return jdbcTemplate.queryForObject(format("SELECT * FROM films WHERE name='%s'" +
-                        " AND description='%s' AND rating_id=%d ",
-                film.getName(), film.getDescription(), film.getMpa().getId()), new FilmMapper());
-
+        return jdbcTemplate.queryForObject(format("SELECT * FROM films WHERE name='%s' "
+                                + "AND description='%s' "
+                                + "AND release_date='%s' "
+                                + "AND duration= %d "
+                                + "AND rating_id=%d",
+                        film.getName(), film.getDescription(), film.getReleaseDate(), film.getDuration(), film.getMpa().getId()),
+                new FilmMapper());
     }
 
     public Film changeFilm(Film film) { // обновление фильма.

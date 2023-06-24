@@ -33,10 +33,10 @@ public class FilmService {
 
     public List<Film> allFilms() { // все фильмы с заполнеными полями жанр и рейтинг
         List<Film> list = filmStorage.allFilms();
-        for (Film film : list) {
+        list.stream().forEach(film ->{
             film.setGenres(filmStorage.getFilmGenres(film.getId()));
             film.setMpa(mpaDao.getMpaId(film.getMpa().getId()));
-        }
+        });
         return list;
     }
 
