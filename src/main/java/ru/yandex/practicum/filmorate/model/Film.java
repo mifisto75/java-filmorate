@@ -22,4 +22,9 @@ public class Film {
     @Positive(message = "продолжительность не может быть отрицательной")
     private int duration;
 
+    @NotNull(message = "рейтинг не может быть пустым")
+    private Mpa mpa;
+
+    private Set<Genre> genres = new HashSet<>();
+
 }

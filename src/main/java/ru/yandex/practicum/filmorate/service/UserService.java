@@ -1,91 +1,52 @@
 package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.Exeptions.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.Dao.FriendListDao;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService {
 
     public UserStorage userStorage;
+    public FriendListDao friendListDao;
 
-    public UserService(UserStorage userStorage) {
+    public UserService(UserStorage userStorage, FriendListDao friendListDao) {
         this.userStorage = userStorage;
+        this.friendListDao = friendListDao;
+
     }
 
     //PUT /users/{id}/friends/{friendId} — добавление в друзья.
-    public void addFriends(int id, int frendId) {
-        if (userStorage.getUserId(id) != null) {
-            if (userStorage.getUserId(frendId) != null) {
-                userStorage.getUserId(id).getFriends().add(frendId);
-                userStorage.getUserId(frendId).getFriends().add(id);
-            } else {
-                throw new NotFoundException("пользывателя под id " + frendId + "нет");
-            }
-
-        } else {
-            throw new NotFoundException("ваш id не верен " + id);
-        }
-
+    public void addFriends(int id, int friendId) {
+        userStorage.userExistenceCheck(id);
+        boolean status = userStorage.getUserId(friendId).getFriends().contains(id);
+        friendListDao.addFriends(id, friendId, status);
     }
 
     //DELETE /users/{id}/friends/{friendId} — удаление из друзей.
     public void deleteFriends(int id, int friendId) {
-        User bosUser = userStorage.getUserId(id);
-        User notFriend = userStorage.getUserId(friendId);
-        if (bosUser != null) {
-            if (notFriend != null) {
-                if (userStorage.getUserId(id).getFriends().remove(friendId)) {
-                    userStorage.getUserId(friendId).getFriends().remove(id);
-                } else {
-                    throw new NotFoundException("у вас и так нет этого пользователя в друзьях " + friendId);
-                }
-            } else {
-                throw new NotFoundException("пользователя которого вы хотите удалить нету " + friendId);
-            }
-        } else {
-            throw new NotFoundException("ваш id не верен " + id);
-        }
-
+        friendListDao.deleteFriends(id, friendId);
     }
 
     //GET /users/{id}/friends — возвращаем список пользователей, являющихся его друзьями.
-    public List<User> getListUser(int id) {
-        User user = userStorage.getUserId(id);
-        List<User> friendUsers = new ArrayList<>();
-        if (user != null) {
-            if (user.getFriends().size() == 0) {
-                throw new NotFoundException("ваш id не верен " + id);
-            }
-        }
-            return friendUsers = user.getFriends().stream().map(u -> userStorage.getUserId(u)).collect(Collectors.toList());
-        }
-
+    public List<User> getUserFriends(int id) { // првевращаем список id заявок в список юзеров
+        return friendListDao.checkFienda(id).stream()
+                .mapToInt(Integer::valueOf)
+                .mapToObj(userStorage::getUserId)
+                .collect(Collectors.toList());
+    }
 
     //GET /users/{id}/friends/common/{otherId} — список друзей, общих с другим пользователем.
     public List<User> getMutualFriends(int id, int otherId) {
-        User bosUser = userStorage.getUserId(id);
-        User friend = userStorage.getUserId(otherId);
-        List<User> mutualFriends = new ArrayList<>();
-        Set<Integer> userFriends;
-        if (bosUser != null) {
-            if (friend != null) {
-                userFriends = new HashSet<>(bosUser.getFriends());
-                userFriends.retainAll(friend.getFriends());
-            } else {
-                throw new NotFoundException("вы указали неверный id пользователя " + id);
-            }
-        } else {
-            throw new NotFoundException("ваш id не верен " + id);
-        }
-        return mutualFriends = userFriends.stream().map(x -> userStorage.getUserId(x)).collect(Collectors.toList());
+        List<User> user1 = getUserFriends(id);
+        List<User> user2 = getUserFriends(otherId);
+        user1.retainAll(user2);
+        return user1;
     }
+
 
 }
