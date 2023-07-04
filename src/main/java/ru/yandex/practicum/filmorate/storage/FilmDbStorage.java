@@ -101,6 +101,33 @@ public class FilmDbStorage implements FilmStorage {
         return genres;
     }
 
+    //GET /films/director/{directorId}?sortBy=[year,likes]
+    public List<Film> getDirectorFilmsSort(int dirId, String sort) {
+        List<Film> filmSort = new ArrayList<>();
+        if (sort.equals("year")) {
+            filmSort = jdbcTemplate.query("SELECT * FROM films WHERE film_id IN " +
+                            "(SELECT film_id FROM film_directors WHERE director_id = ?) ORDER BY release_date LIMIT 10",
+                    new FilmMapper(), dirId);
+        } else if (sort.equals("likes")) {
+            filmSort = jdbcTemplate.query("" +
+                            "SELECT f.* " +
+                            "FROM film_directors AS fd " +
+                            "LEFT OUTER JOIN films AS f ON fd.film_id = f.film_id " +
+                            "LEFT OUTER JOIN film_like_list AS fl ON f.film_id = fl.film_id " +
+                            "WHERE fd.director_id = ? " +
+                            "GROUP BY fd.film_id " +
+                            "ORDER BY COUNT(fl.user_id) LIMIT 10",
+                    new FilmMapper(), dirId);
+        } else {
+            throw new ru.yandex.practicum.filmorate.Exeptions.ValidationException(String.format("Ошибка вывода фильмов режиссера - sort: %s не существует",
+                    sort));
+        }
+        if (filmSort.isEmpty()) {
+            throw new NotFoundException("Нет фильмов по данному режиссеру");
+        } else {
+            return filmSort;
+        }
+    }
 
     private static class FilmMapper implements RowMapper<Film> {
         @Override

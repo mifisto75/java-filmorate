@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @Slf4j
@@ -60,5 +61,11 @@ public class FilmController {
     public List<Film> popularFilm(@RequestParam(name = "count", defaultValue = "10") Integer count) { // фильмы по популярности
         log.info("вызван метод popularFilm - запрос на писок фильмов по популярности с count " + count);
         return filmService.popularFilm(count);
+    }
+
+    @GetMapping("/films/director/{directorId}")
+    public List<Film> getDirectorFilmsSort(@PathVariable("directorId") @Min(1) int dirId,
+                                           @RequestParam(value = "sortBy", defaultValue = "likes") String sortBy) {
+        return filmService.getDirectorFilmsSort(dirId, sortBy);
     }
 }
