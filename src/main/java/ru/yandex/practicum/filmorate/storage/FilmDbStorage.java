@@ -101,6 +101,17 @@ public class FilmDbStorage implements FilmStorage {
         return genres;
     }
 
+    @Override
+    public List <Film> getCommonFilms(Integer userId, Integer friendId) {
+        String sql =
+                "SELECT f.* FROM films AS f " +
+                "LEFT JOIN film_like_list AS fl ON f.film_id = fl.film_id " +
+                "WHERE fl.film_id IN (SELECT film_id FROM film_like_list WHERE user_id = ?) " +
+                "AND fl.film_id IN (SELECT film_id FROM film_like_list WHERE user_id = ?) " +
+                "GROUP BY fl.film_id " +
+                "ORDER BY COUNT(fl.user_id) DESC";
+        return new ArrayList<>(jdbcTemplate.query(sql, new FilmMapper(), userId, friendId));
+    }
 
     private static class FilmMapper implements RowMapper<Film> {
         @Override
