@@ -10,6 +10,7 @@ import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,8 +22,10 @@ public class FilmService {
     private GenreDao genreDao;
     private LikeDao likeDao;
     private MpaDao mpaDao;
+    private RecommendationService recommendationService;
 
-    public FilmService(FilmStorage filmStorage, UserStorage userStorage, GenreDao genreDao, LikeDao likeDao, MpaDao mpaDao) {
+    public FilmService(RecommendationService recommendationService, FilmStorage filmStorage, UserStorage userStorage, GenreDao genreDao, LikeDao likeDao, MpaDao mpaDao) {
+        this.recommendationService = recommendationService;
         this.filmStorage = filmStorage;
         this.userStorage = userStorage;
         this.genreDao = genreDao;
@@ -91,4 +94,7 @@ public class FilmService {
         return popularFilmList;
     }
 
+    public List<Film> getFilmRecommendations(int userId) {
+        return recommendationService.getRecommendedFilms(userId);
+    }
 }
