@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.Exeptions.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
+import ru.yandex.practicum.filmorate.storage.Dao.MpaDao;
 import ru.yandex.practicum.filmorate.storage.Dao.impl.GenreDaoImpl;
 
 import javax.validation.ValidationException;
@@ -25,11 +26,12 @@ import static java.lang.String.format;
 @Component
 public class FilmDbStorage implements FilmStorage {
     private final JdbcTemplate jdbcTemplate;
+    public static MpaDao mpaDao;
 
     @Autowired
-    public FilmDbStorage(JdbcTemplate jdbcTemplate) {
+    public FilmDbStorage(JdbcTemplate jdbcTemplate, MpaDao mpaDao) {
         this.jdbcTemplate = jdbcTemplate;
-
+        FilmDbStorage.mpaDao = mpaDao;
     }
 
     public List<Film> allFilms() {   //получение всех фильмов.
@@ -105,8 +107,7 @@ public class FilmDbStorage implements FilmStorage {
     private static class FilmMapper implements RowMapper<Film> {
         @Override
         public Film mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Mpa mpa = new Mpa();
-            mpa.setId(rs.getInt("rating_id"));
+            Mpa mpa = mpaDao.getMpaId(rs.getInt("rating_id"));
 
             Film film = new Film();
             film.setId(rs.getInt("film_id"));
