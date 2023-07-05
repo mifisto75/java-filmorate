@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -27,6 +28,7 @@ public class FilmTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     @Test
     void addFilmOkTest() throws Exception {
         mockMvc.perform(
@@ -42,7 +44,7 @@ public class FilmTest {
         ).andExpect(status().isOk());
     }
 
-
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     @Test
     void addFilmFailNameTest() throws Exception {
         mockMvc.perform(
@@ -57,6 +59,7 @@ public class FilmTest {
         ).andExpect(status().is4xxClientError());
     }
 
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     @Test
     void addFilmFailDescripsonTest() throws Exception {
         mockMvc.perform(
@@ -71,7 +74,7 @@ public class FilmTest {
         ).andExpect(status().is4xxClientError());
     }
 
-
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     @Test
     void addFilmFailDurationt() throws Exception {
         mockMvc.perform(
@@ -86,6 +89,7 @@ public class FilmTest {
         ).andExpect(status().is4xxClientError());
     }
 
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     @Test
     void updateFilmOkTest() throws Exception {
         mockMvc.perform(
@@ -114,6 +118,7 @@ public class FilmTest {
         ).andExpect(status().isOk());
     }
 
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     @Test
     void updateFilmUnknownTest() throws Exception {
         mockMvc.perform(
