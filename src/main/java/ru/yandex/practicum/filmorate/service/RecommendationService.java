@@ -36,7 +36,7 @@ public class RecommendationService {
             return Collections.emptyList();
         }
         // получаем список рекомендованных фильмов
-        List <Film> recommendedFilms = new ArrayList<>();
+        List<Film> recommendedFilms = new ArrayList<>();
         for (int i : listOfRecommendedFilmsIds) {
             recommendedFilms.add(filmStorage.getFilmId(i));
         }
