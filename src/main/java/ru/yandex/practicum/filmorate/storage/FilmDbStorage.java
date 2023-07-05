@@ -104,7 +104,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
 
-    private static class FilmMapper implements RowMapper<Film> {
+    private class FilmMapper implements RowMapper<Film> {
         @Override
         public Film mapRow(ResultSet rs, int rowNum) throws SQLException {
             Mpa mpa = mpaDao.getMpaId(rs.getInt("rating_id"));
@@ -116,6 +116,7 @@ public class FilmDbStorage implements FilmStorage {
             film.setReleaseDate(rs.getDate("release_date").toLocalDate());
             film.setDuration(rs.getInt("duration"));
             film.setMpa(mpa);
+            film.setGenres(getFilmGenres(rs.getInt("film_id")));
             return film;
         }
     }
