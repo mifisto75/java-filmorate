@@ -7,9 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
 import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.storage.Dao.DirectorDao;
 
@@ -23,35 +22,38 @@ import static org.junit.jupiter.api.Assertions.*;
 @AutoConfigureMockMvc
 public class DirectorsTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-    @Autowired
-    private DirectorDao directorDao;
+    private final DirectorDao directorDao;
 
     private Director dir;
     private Director dir2;
 
+    @Autowired
+    public DirectorsTest(DirectorDao directorDao) {
+        this.directorDao = directorDao;
+    }
+
     @BeforeEach
     void dirs() {
         dir = new Director(1, "Director");
-        dir2 = new Director(2, "Director");
+        dir2 = new Director(2, "Director2");
     }
 
     @Test
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     void createDirTest() throws Exception {
         Director dirDB = directorDao.createDir(dir2);
-        assertEquals(dir, dirDB);
+        assertEquals(new Director(1, "Director2"), dirDB);
     }
 
     @Test
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     void getDirById() {
         directorDao.createDir(dir);
         assertEquals(dir, directorDao.getDirById(1));
     }
 
     @Test
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     void getAllDirs() {
         directorDao.createDir(dir);
         directorDao.createDir(dir2);
@@ -59,6 +61,7 @@ public class DirectorsTest {
     }
 
     @Test
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     void deleteDir() {
         directorDao.createDir(dir);
         assertEquals(List.of(dir), directorDao.getAllDirs());
