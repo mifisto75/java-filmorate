@@ -72,8 +72,8 @@ public class RecommendationService {
         List<Integer> recommendedFilmIds = new ArrayList<>();
         for (int id : topTenMatchesUsersIds.keySet()) {
             List<Integer> currentUserLikes = getLikesForUser(id);
-            setUniqueFilmIds(currentUserLikes, userLikedFilmsIds);
-            for (int i : currentUserLikes) {
+            List<Integer> notLikedFilmIds = setUniqueFilmIds(currentUserLikes, userLikedFilmsIds);
+            for (int i : notLikedFilmIds) {
                 if (!recommendedFilmIds.contains(i)) {
                     recommendedFilmIds.add(i);
                 }
@@ -82,12 +82,14 @@ public class RecommendationService {
         return recommendedFilmIds;
     }
 
-    public void setUniqueFilmIds(List<Integer> one, List<Integer> two) {
+    public List<Integer> setUniqueFilmIds(List<Integer> one, List<Integer> two) {
+        List<Integer> notLikedFilmIds = new ArrayList<>();
         for (int i : one) {
-            if (two.contains(i)) {
-                one.remove(i);
+            if (!two.contains(i)) {
+                notLikedFilmIds.add(i);
             }
         }
+        return notLikedFilmIds;
     }
 
     public List<Integer> getLikesForUser(int userId) {
@@ -102,9 +104,14 @@ public class RecommendationService {
             int userId = like.getUserId();
             int filmId = like.getFilmId();
             if (!usersAndTheirLikes.containsKey(userId)) {
-                usersAndTheirLikes.put(userId, new ArrayList<>(filmId));
+                usersAndTheirLikes.put(userId, new ArrayList<>());
+                List<Integer> list = usersAndTheirLikes.get(userId);
+                list.add(filmId);
+                usersAndTheirLikes.put(userId, list);
             } else {
-                usersAndTheirLikes.get(userId).add(filmId);
+                List<Integer> list = usersAndTheirLikes.get(userId);
+                list.add(filmId);
+                usersAndTheirLikes.put(userId, list);
             }
         }
         return usersAndTheirLikes;
