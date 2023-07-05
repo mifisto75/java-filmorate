@@ -34,6 +34,7 @@ public class UserService {
 
     //GET /users/{id}/friends — возвращаем список пользователей, являющихся его друзьями.
     public List<User> getUserFriends(int id) { // првевращаем список id заявок в список юзеров
+        userStorage.userExistenceCheck(id);
         return friendListDao.checkFienda(id).stream()
                 .mapToInt(Integer::valueOf)
                 .mapToObj(userStorage::getUserId)

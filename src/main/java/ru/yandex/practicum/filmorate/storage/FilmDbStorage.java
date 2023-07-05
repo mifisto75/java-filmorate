@@ -101,6 +101,15 @@ public class FilmDbStorage implements FilmStorage {
         return genres;
     }
 
+    @Override
+    public void deleteFilm(Integer filmId) {
+        try {
+            jdbcTemplate.update("DELETE FROM films WHERE film_id=?", filmId);
+        } catch (EmptyResultDataAccessException e) {
+            throw new NotFoundException("не верный id пользывателя ");
+        }
+    }
+
 
     private static class FilmMapper implements RowMapper<Film> {
         @Override

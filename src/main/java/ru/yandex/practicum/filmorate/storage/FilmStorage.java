@@ -22,5 +22,5 @@ public interface FilmStorage {
 
     Set<Genre> getFilmGenres(int filmId);
 
-
+    void deleteFilm(Integer filmId);
 }
