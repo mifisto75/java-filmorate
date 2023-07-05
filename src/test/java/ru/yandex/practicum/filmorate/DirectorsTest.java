@@ -35,7 +35,7 @@ public class DirectorsTest {
     @BeforeEach
     void dirs() {
         dir = new Director(1, "Director");
-        dir2 = new Director(2, "Director2");
+        dir2 = new Director(5, "Director2");
     }
 
     @Test
@@ -57,6 +57,7 @@ public class DirectorsTest {
     void getAllDirs() {
         directorDao.createDir(dir);
         directorDao.createDir(dir2);
+        dir2.setId(2);
         assertEquals(List.of(dir, dir2), directorDao.getAllDirs());
     }
 

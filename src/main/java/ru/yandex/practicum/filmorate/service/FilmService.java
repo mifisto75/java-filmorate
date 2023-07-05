@@ -102,11 +102,11 @@ public class FilmService {
 
     public List<Film> getDirectorFilmsSort(int dirId, String sort) {
         List<Film> films = filmStorage.getDirectorFilmsSort(dirId, sort);
-        for (Film film : films) {
-            film.setDirectors(directorDao.getFilmDirectors(film.getId()));
+        films.stream().forEach(film -> {
             film.setGenres(filmStorage.getFilmGenres(film.getId()));
             film.setMpa(mpaDao.getMpaId(film.getMpa().getId()));
-        }
+            film.setDirectors(directorDao.getFilmDirectors(film.getId()));
+        });
         return films;
     }
 
