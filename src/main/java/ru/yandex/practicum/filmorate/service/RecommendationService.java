@@ -50,11 +50,17 @@ public class RecommendationService {
         Map<Integer, Long> idsAndMatchesCount = new HashMap<>();
 
         for (int id : usersAndLikedFilmsIds.keySet()) {
-            long count = 0;
             List<Integer> user = userLikedFilmsIds;
             user.retainAll(usersAndLikedFilmsIds.get(id));
-            count = user.size();
+            long count = user.size();
+            if (user.isEmpty()) {
+                continue;
+            }
             idsAndMatchesCount.put(id, count);
+        }
+
+        if (idsAndMatchesCount.isEmpty()) {
+            return Collections.emptyList();
         }
         // Найти 10 пользователей с максимальным количеством пересечения по лайкам.
         Map<Integer, Long> topTenMatchesUsersIds = idsAndMatchesCount.entrySet().stream()
