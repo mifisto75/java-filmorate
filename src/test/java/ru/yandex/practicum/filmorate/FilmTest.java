@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +29,7 @@ public class FilmTest {
     private JdbcTemplate jdbcTemplate;
 
     @Test
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     void addFilmOkTest() throws Exception {
         mockMvc.perform(
                 post("/films")
@@ -46,6 +46,7 @@ public class FilmTest {
 
 
     @Test
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     void addFilmFailNameTest() throws Exception {
         mockMvc.perform(
                 post("/films")
@@ -60,6 +61,7 @@ public class FilmTest {
     }
 
     @Test
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     void addFilmFailDescripsonTest() throws Exception {
         mockMvc.perform(
                 post("/films")
@@ -75,6 +77,7 @@ public class FilmTest {
 
 
     @Test
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     void addFilmFailDurationt() throws Exception {
         mockMvc.perform(
                 post("/films")
@@ -89,6 +92,7 @@ public class FilmTest {
     }
 
     @Test
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     void updateFilmOkTest() throws Exception {
         mockMvc.perform(
                 post("/films")
@@ -117,6 +121,7 @@ public class FilmTest {
     }
 
     @Test
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     void updateFilmUnknownTest() throws Exception {
         mockMvc.perform(
                 put("/films")
