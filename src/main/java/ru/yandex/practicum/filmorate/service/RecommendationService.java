@@ -32,11 +32,9 @@ public class RecommendationService {
             return Collections.emptyList();
         }
         // получаем список рекомендованных фильмов
-        List<Film> recommendedFilms = new ArrayList<>();
-        for (int i : listOfRecommendedFilmsIds) {
-            recommendedFilms.add(filmStorage.getFilmId(i));
-        }
-        return recommendedFilms;
+        return listOfRecommendedFilmsIds.stream()
+                .map(filmStorage::getFilmId)
+                .collect(Collectors.toList());
     }
 
     private List<Integer> makeRecommendationsList(
@@ -69,14 +67,13 @@ public class RecommendationService {
                 .collect(Collectors.toList());
 
         // Определить id фильмов, которые наш пользователь не лайкал.
-        List<Integer> recommendedFilmIds = new ArrayList<>();
-        for (int otherUserId : topTenMatchesUsersIds) {
-            List<Integer> otherUserLikes = new ArrayList<>(usersAndLikedFilmsIds.get(otherUserId));
-            otherUserLikes.removeAll(userLikedFilmsIds);
-            otherUserLikes.removeAll(recommendedFilmIds);
-            recommendedFilmIds.addAll(otherUserLikes);
-        }
-        return recommendedFilmIds;
+        return topTenMatchesUsersIds.stream()
+                .map(usersAndLikedFilmsIds::get)
+                .flatMap(List::stream)
+                .filter(filmId -> !userLikedFilmsIds.contains(filmId))
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     private Map<Integer, List<Integer>> makeMapOfUsersAndLikes(List<Like> allLikes) {
