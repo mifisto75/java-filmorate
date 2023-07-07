@@ -102,6 +102,7 @@ public class FilmService {
     //GET/films/common?userId={userId}&friendId={friendId} - возвращает список общих с другом фильмов с сортировкой по их популярности.
     public List<Film> getCommonFilms(Integer userId, Integer friendId) {
         return filmStorage.getCommonFilms(userId, friendId);
+    }
 
     public List<Film> getDirectorFilmsSort(int dirId, String sort) {
         List<Film> films = filmStorage.getDirectorFilmsSort(dirId, sort);

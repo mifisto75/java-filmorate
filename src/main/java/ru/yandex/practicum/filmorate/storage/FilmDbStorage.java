@@ -113,6 +113,7 @@ public class FilmDbStorage implements FilmStorage {
                         "GROUP BY fl.film_id " +
                         "ORDER BY COUNT(fl.user_id) DESC";
         return new ArrayList<>(jdbcTemplate.query(sql, new FilmMapper(), userId, friendId));
+    }
 
     //GET /films/director/{directorId}?sortBy=[year,likes]
     public List<Film> getDirectorFilmsSort(int dirId, String sort) {

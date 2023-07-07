@@ -68,6 +68,7 @@ public class FilmController {
         log.info("вызван метод getCommonFilms - - запрос на список общих друзей пользователем c id "
                 + userId + " пользователя с id " + friendId);
         return filmService.getCommonFilms(userId, friendId);
+    }
 
     @GetMapping("/films/director/{directorId}")
     public List<Film> getDirectorFilmsSort(@PathVariable("directorId") @Min(1) int dirId,
