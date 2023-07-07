@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @Slf4j
@@ -67,5 +68,10 @@ public class FilmController {
         log.info("вызван метод getCommonFilms - - запрос на список общих друзей пользователем c id "
                 + userId + " пользователя с id " + friendId);
         return filmService.getCommonFilms(userId, friendId);
+
+    @GetMapping("/films/director/{directorId}")
+    public List<Film> getDirectorFilmsSort(@PathVariable("directorId") @Min(1) int dirId,
+                                           @RequestParam(value = "sortBy", defaultValue = "likes") String sortBy) {
+        return filmService.getDirectorFilmsSort(dirId, sortBy);
     }
 }
