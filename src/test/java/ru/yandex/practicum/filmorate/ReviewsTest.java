@@ -26,7 +26,7 @@ public class ReviewsTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private void baza()throws Exception{
+    private void baza() throws Exception {
         mockMvc.perform(
                 post("/users")
                         .content("{\n" +
@@ -64,12 +64,9 @@ public class ReviewsTest {
     }
 
 
-
-
-
     @Test
     @Sql(scripts = {"/schema.sql", "/data.sql"})
-    void addReviewTest( )throws Exception { //Добавление нового отзыва.
+    void addReviewTest() throws Exception { //Добавление нового отзыва.
         mockMvc.perform(
                 post("/reviews")
                         .content("{\n" +
@@ -126,12 +123,12 @@ public class ReviewsTest {
                                 "}")
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().is2xxSuccessful()); // од 200 ОК
-
     }
+
     @Test
     @Sql(scripts = {"/schema.sql", "/data.sql"})
-    void changeReviewTest()throws Exception { //Редактирование уже имеющегося отзыва.
-      baza();
+    void changeReviewTest() throws Exception { //Редактирование уже имеющегося отзыва.
+        baza();
         mockMvc.perform(
                 put("/reviews")
                         .content("{\n" +
@@ -161,9 +158,10 @@ public class ReviewsTest {
 
 
     }
+
     @Test
     @Sql(scripts = {"/schema.sql", "/data.sql"})
-    void deleteReviewTest()throws Exception { //Удаление уже имеющегося отзыва.
+    void deleteReviewTest() throws Exception { //Удаление уже имеющегося отзыва.
         mockMvc.perform(
                 delete("/reviews/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -177,9 +175,10 @@ public class ReviewsTest {
         ).andExpect(status().is2xxSuccessful()); // код 200 ОК
 
     }
+
     @Test
     @Sql(scripts = {"/schema.sql", "/data.sql"})
-    void getReviewTest()throws Exception { //Получение отзыва по идентификатору.
+    void getReviewTest() throws Exception { //Получение отзыва по идентификатору.
         mockMvc.perform(
                 get("/reviews/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -195,7 +194,7 @@ public class ReviewsTest {
 
     @Test
     @Sql(scripts = {"/schema.sql", "/data.sql"})
-    void getTopReviewsFilmTest()throws Exception { //Получение всех отзывов по идентификатору фильма,
+    void getTopReviewsFilmTest() throws Exception { //Получение всех отзывов по идентификатору фильма,
         mockMvc.perform(
                 get("/reviews")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -214,7 +213,7 @@ public class ReviewsTest {
 
     @Test
     @Sql(scripts = {"/schema.sql", "/data.sql"})
-    void addAndDeleteReviewLikeTest()throws Exception { //пользователь ставит лайк отзыву./удаляет
+    void addAndDeleteReviewLikeTest() throws Exception { //пользователь ставит лайк отзыву./удаляет
         mockMvc.perform(
                 put("/reviews/1/like/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -237,9 +236,10 @@ public class ReviewsTest {
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());// код 200
     }
+
     @Test
     @Sql(scripts = {"/schema.sql", "/data.sql"})
-    void addAndDeleteReviewDislikeTest()throws Exception { //пользователь ставит дизлайк отзыву./удаляет
+    void addAndDeleteReviewDislikeTest() throws Exception { //пользователь ставит дизлайк отзыву./удаляет
         mockMvc.perform(
                 put("/reviews/1/dislike/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -262,24 +262,6 @@ public class ReviewsTest {
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());// код 200
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     @Test
