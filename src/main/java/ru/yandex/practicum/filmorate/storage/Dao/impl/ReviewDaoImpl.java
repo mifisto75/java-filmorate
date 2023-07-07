@@ -40,7 +40,7 @@ public class ReviewDaoImpl implements ReviewDao {
                                 + "AND user_id= %d "
                                 + "AND film_id=%d",
                         review.getContent(), review.getUserId(), review.getFilmId()),
-                new ReviewDaoImpl.reviewMapper(jdbcTemplate));
+                new ReviewMapper(jdbcTemplate));
     }
 
     @Override
@@ -65,7 +65,7 @@ public class ReviewDaoImpl implements ReviewDao {
     public Review getReview(int id) { //Получение отзыва по идентификатору.
         try {
             return jdbcTemplate.queryForObject(format("SELECT * FROM reviews WHERE review_id=%d", id),
-                    new ReviewDaoImpl.reviewMapper(jdbcTemplate));
+                    new ReviewMapper(jdbcTemplate));
         } catch (EmptyResultDataAccessException e) {
             throw new NotFoundException("не найден отзыв по id " + id);
         }
@@ -75,13 +75,13 @@ public class ReviewDaoImpl implements ReviewDao {
     public List<Review> getTopReviewsFilm(int filmId, int count) { //Получение всех отзывов по идентификатору фильма
         if (filmId != 0) {
             return new ArrayList<Review>(jdbcTemplate.query(format("SELECT * FROM reviews WHERE film_id=%d ",
-                    filmId), new ReviewDaoImpl.reviewMapper(jdbcTemplate))).stream()
+                    filmId), new ReviewMapper(jdbcTemplate))).stream()
                     .sorted(Comparator.comparing(Review::getUseful).reversed())
                     .limit(count)
                     .collect(Collectors.toList());
         } else {
             return new ArrayList<Review>(jdbcTemplate.query("SELECT * FROM reviews ",
-                    new ReviewDaoImpl.reviewMapper(jdbcTemplate))).stream()
+                    new ReviewMapper(jdbcTemplate))).stream()
                     .sorted(Comparator.comparing(Review::getUseful).reversed())
                     .limit(count)
                     .collect(Collectors.toList());
@@ -110,10 +110,10 @@ public class ReviewDaoImpl implements ReviewDao {
 
     }
 
-    private static class reviewMapper implements RowMapper<Review> {
+    private static class ReviewMapper implements RowMapper<Review> {
         private final JdbcTemplate jdbcTemplate;
 
-        private reviewMapper(JdbcTemplate jdbcTemplate) {
+        private ReviewMapper(JdbcTemplate jdbcTemplate) {
             this.jdbcTemplate = jdbcTemplate;
         }
 
