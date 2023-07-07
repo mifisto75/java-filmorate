@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.Dao.DirectorDao;
 import ru.yandex.practicum.filmorate.storage.Dao.GenreDao;
 import ru.yandex.practicum.filmorate.storage.Dao.LikeDao;
 import ru.yandex.practicum.filmorate.storage.Dao.MpaDao;
@@ -21,15 +22,17 @@ public class FilmService {
     private LikeDao likeDao;
     private MpaDao mpaDao;
     private RecommendationService recommendationService;
+    private DirectorDao directorDao;
 
-    public FilmService(RecommendationService recommendationService, FilmStorage filmStorage, UserStorage userStorage, GenreDao genreDao, LikeDao likeDao, MpaDao mpaDao) {
-        this.recommendationService = recommendationService;
+    public FilmService(FilmStorage filmStorage, UserStorage userStorage, GenreDao genreDao, LikeDao likeDao,
+                       MpaDao mpaDao, DirectorDao directorDao, RecommendationService recommendationService) {
         this.filmStorage = filmStorage;
         this.userStorage = userStorage;
         this.genreDao = genreDao;
         this.likeDao = likeDao;
         this.mpaDao = mpaDao;
-
+        this.directorDao = directorDao;
+        this.recommendationService = recommendationService;
     }
 
     public List<Film> allFilms() { // все фильмы с заполнеными полями жанр и рейтинг
@@ -37,6 +40,7 @@ public class FilmService {
         list.stream().forEach(film -> {
             film.setGenres(filmStorage.getFilmGenres(film.getId()));
             film.setMpa(mpaDao.getMpaId(film.getMpa().getId()));
+            film.setDirectors(directorDao.getFilmDirectors(film.getId()));
         });
         return list;
     }
@@ -45,6 +49,8 @@ public class FilmService {
         Film fil = filmStorage.addFilm(film);
         filmStorage.addFilmGenres(fil.getId(), film.getGenres());
         fil.setGenres(filmStorage.getFilmGenres(fil.getId()));
+        directorDao.addFilmDirectors(fil.getId(), film.getDirectors());
+        fil.setDirectors(directorDao.getFilmDirectors(fil.getId()));
         return fil;
     }
 
@@ -54,6 +60,8 @@ public class FilmService {
         filmStorage.updateFilmGenres(fil.getId(), film.getGenres());
         fil.setGenres(filmStorage.getFilmGenres(fil.getId()));
         fil.setMpa(mpaDao.getMpaId(fil.getMpa().getId()));
+        directorDao.updateDirectors(fil.getId(), film.getDirectors());
+        fil.setDirectors(directorDao.getFilmDirectors(fil.getId()));
         return fil;
     }
 
@@ -62,6 +70,7 @@ public class FilmService {
         Film film = filmStorage.getFilmId(id);
         film.setGenres(filmStorage.getFilmGenres(id));
         film.setMpa(mpaDao.getMpaId(film.getMpa().getId()));
+        film.setDirectors(directorDao.getFilmDirectors(id));
         return film;
     }
 
@@ -94,5 +103,15 @@ public class FilmService {
 
     public List<Film> getFilmRecommendations(int userId) {
         return recommendationService.getRecommendedFilms(userId);
+    }
+
+    public List<Film> getDirectorFilmsSort(int dirId, String sort) {
+        List<Film> films = filmStorage.getDirectorFilmsSort(dirId, sort);
+        films.stream().forEach(film -> {
+            film.setGenres(filmStorage.getFilmGenres(film.getId()));
+            film.setMpa(mpaDao.getMpaId(film.getMpa().getId()));
+            film.setDirectors(directorDao.getFilmDirectors(film.getId()));
+        });
+        return films;
     }
 }
