@@ -63,6 +63,16 @@ public class UserDbStorage implements UserStorage {
         }
     }
 
+    @Override
+    public void deleteUser(int userId) {
+        try {
+            jdbcTemplate.update("DELETE FROM users WHERE user_id=?", userId);
+            jdbcTemplate.update("DELETE FROM user_friend_list WHERE from_user_id=? or to_user_id=?", userId, userId);
+        } catch (EmptyResultDataAccessException e) {
+            throw new NotFoundException("не верный id пользователя ");
+        }
+    }
+
     public static class UserMapper implements RowMapper<User> { //мапер для юзеров
         @Override
         public User mapRow(ResultSet rs, int rowNum) throws SQLException {
