@@ -21,16 +21,18 @@ public class FilmService {
     private GenreDao genreDao;
     private LikeDao likeDao;
     private MpaDao mpaDao;
+    private RecommendationService recommendationService;
     private DirectorDao directorDao;
 
     public FilmService(FilmStorage filmStorage, UserStorage userStorage, GenreDao genreDao, LikeDao likeDao,
-                       MpaDao mpaDao, DirectorDao directorDao) {
+                       MpaDao mpaDao, DirectorDao directorDao, RecommendationService recommendationService) {
         this.filmStorage = filmStorage;
         this.userStorage = userStorage;
         this.genreDao = genreDao;
         this.likeDao = likeDao;
         this.mpaDao = mpaDao;
         this.directorDao = directorDao;
+        this.recommendationService = recommendationService;
     }
 
     public List<Film> allFilms() { // все фильмы с заполнеными полями жанр и рейтинг
@@ -97,6 +99,10 @@ public class FilmService {
             }
         }
         return popularFilmList;
+    }
+
+    public List<Film> getFilmRecommendations(int userId) {
+        return recommendationService.getRecommendedFilms(userId);
     }
 
     //GET/films/common?userId={userId}&friendId={friendId} - возвращает список общих с другом фильмов с сортировкой по их популярности.
