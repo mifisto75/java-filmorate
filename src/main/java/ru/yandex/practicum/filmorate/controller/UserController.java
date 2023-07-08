@@ -4,12 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.Exeptions.NotFoundException;
-import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.model.*;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.Dao.EventDao;
 
 import javax.validation.Valid;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,11 +20,13 @@ public class UserController {
 
     private final UserService userService;
     private final FilmService filmService;
+    private final EventDao eventDao;
 
     @Autowired
-    public UserController(UserService userService, FilmService filmService) {
+    public UserController(UserService userService, FilmService filmService, EventDao eventDao) {
         this.userService = userService;
         this.filmService = filmService;
+        this.eventDao = eventDao;
     }
 
     @GetMapping("/users") // получение списка всех пользователей.
@@ -52,15 +55,20 @@ public class UserController {
 
     @PutMapping("/users/{id}/friends/{friendId}") // добавить в друзья
     public void addFrends(@PathVariable Integer id, @PathVariable Integer friendId) {
-        log.info("вызван метод addFrends - запрос на добовление в друзья пользывателем c id " + id + " пользывателя с id " + friendId);
+        log.info("вызван метод addFrends - запрос на добовление в друзья пользывателем c id " + id
+                + " пользывателя с id " + friendId);
         userService.addFriends(id, friendId);
-
+        eventDao.addEvent(new Event(Instant.now().toEpochMilli(), id, "FRIEND",
+                "ADD", friendId));
     }
 
     @DeleteMapping("/users/{id}/friends/{friendId}") // удалить из друзей
     public void deleteFrends(@PathVariable Integer id, @PathVariable Integer friendId) {
-        log.info("вызван метод deleteFrends - запрос на удаление из друзей пользывателем c id " + id + " пользывателя с id " + friendId);
+        log.info("вызван метод deleteFrends - запрос на удаление из друзей пользывателем c id " + id
+                + " пользывателя с id " + friendId);
         userService.deleteFriends(id, friendId);
+        eventDao.addEvent(new Event(Instant.now().toEpochMilli(), id, "FRIEND",
+                "REMOVE", friendId));
     }
 
     @GetMapping("/users/{id}/friends") // список друзей
@@ -79,5 +87,11 @@ public class UserController {
     public List<Film> getFilmRecommendations(@PathVariable int id) {
         log.info("вызван метод getFilmRecommendations для пользователя с id: {}", id);
         return filmService.getFilmRecommendations(id);
+    }
+
+    @GetMapping("/users/{id}/feed") //вернуть список последних действий пользователя по id.
+    public List<Event> getUserFeed(@PathVariable Integer id) {
+        log.info("вызван метод getUserFeed - запрос на действия пользователя с ID " + id);
+        return eventDao.getUserEvents(id);
     }
 }
