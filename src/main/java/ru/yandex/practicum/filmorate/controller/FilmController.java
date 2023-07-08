@@ -57,10 +57,13 @@ public class FilmController {
         filmService.deleteLikeFilm(id, userId);
     }
 
-    @GetMapping("/films/popular")
-    public List<Film> popularFilm(@RequestParam(name = "count", defaultValue = "10") Integer count) { // фильмы по популярности
-        log.info("вызван метод popularFilm - запрос на писок фильмов по популярности с count " + count);
-        return filmService.popularFilm(count);
+    @GetMapping("/films/popular") // фильмы по популярности
+    public List<Film> popularFilm(@RequestParam(name = "count", defaultValue = "10") Integer count,
+                                  @RequestParam(name = "genreId", required = false) Integer genreId,
+                                  @RequestParam(name = "year", required = false) Integer year) {
+        log.info("вызван метод popularFilm - запрос на список фильмов по популярности " +
+                "с count " + count + ", genreId " + genreId + ", year " + year);
+        return filmService.popularFilm(count, genreId, year);
     }
 
     @GetMapping("/films/common")
