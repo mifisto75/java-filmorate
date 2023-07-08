@@ -28,6 +28,7 @@ public class FilmTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     @Test
     @Sql(scripts = {"/schema.sql", "/data.sql"})
     void addFilmOkTest() throws Exception {
@@ -44,7 +45,7 @@ public class FilmTest {
         ).andExpect(status().isOk());
     }
 
-
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     @Test
     @Sql(scripts = {"/schema.sql", "/data.sql"})
     void addFilmFailNameTest() throws Exception {
@@ -60,6 +61,7 @@ public class FilmTest {
         ).andExpect(status().is4xxClientError());
     }
 
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     @Test
     @Sql(scripts = {"/schema.sql", "/data.sql"})
     void addFilmFailDescripsonTest() throws Exception {
@@ -75,7 +77,7 @@ public class FilmTest {
         ).andExpect(status().is4xxClientError());
     }
 
-
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     @Test
     @Sql(scripts = {"/schema.sql", "/data.sql"})
     void addFilmFailDurationt() throws Exception {
@@ -91,6 +93,7 @@ public class FilmTest {
         ).andExpect(status().is4xxClientError());
     }
 
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     @Test
     @Sql(scripts = {"/schema.sql", "/data.sql"})
     void updateFilmOkTest() throws Exception {
@@ -120,6 +123,7 @@ public class FilmTest {
         ).andExpect(status().isOk());
     }
 
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     @Test
     @Sql(scripts = {"/schema.sql", "/data.sql"})
     void updateFilmUnknownTest() throws Exception {

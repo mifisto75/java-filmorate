@@ -63,6 +63,13 @@ public class FilmController {
         return filmService.popularFilm(count);
     }
 
+    @GetMapping("/films/common")
+    public List<Film> getCommonFilms(@RequestParam Integer userId, @RequestParam Integer friendId) { // общие фильмы по популярности
+        log.info("вызван метод getCommonFilms - - запрос на список общих друзей пользователем c id "
+                + userId + " пользователя с id " + friendId);
+        return filmService.getCommonFilms(userId, friendId);
+    }
+
     @GetMapping("/films/director/{directorId}")
     public List<Film> getDirectorFilmsSort(@PathVariable("directorId") @Min(1) int dirId,
                                            @RequestParam(value = "sortBy", defaultValue = "likes") String sortBy) {
