@@ -24,4 +24,6 @@ public interface FilmStorage {
     List<Film> getCommonFilms(Integer userId, Integer friendId);
 
     List<Film> getDirectorFilmsSort(int dirId, String sort);
+
+    void deleteFilm(Integer filmId);
 }
