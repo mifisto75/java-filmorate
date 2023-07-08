@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
-@Service
+
 @Component
 public class ReviewDaoImpl implements ReviewDao {
     private final JdbcTemplate jdbcTemplate;
