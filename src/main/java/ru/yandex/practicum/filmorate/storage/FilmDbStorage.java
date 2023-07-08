@@ -92,15 +92,6 @@ public class FilmDbStorage implements FilmStorage {
         addFilmGenres(filmId, genres);
     }
 
-    public void deleteFilm(Integer filmId) {
-        try {
-            jdbcTemplate.update("DELETE FROM films WHERE film_id=?", filmId);
-        } catch (EmptyResultDataAccessException e) {
-            throw new NotFoundException("не верный id пользывателя ");
-        }
-    }
-
-
     public Set<Genre> getFilmGenres(int filmId) {
         Set<Genre> genres = new HashSet<>(jdbcTemplate.query(format(""
                 + "SELECT f.genre_id, g.name "
