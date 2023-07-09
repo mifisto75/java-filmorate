@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.Exeptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.Dao.DirectorDao;
 import ru.yandex.practicum.filmorate.storage.Dao.GenreDao;
@@ -89,10 +88,7 @@ public class FilmService {
     //GET /films/popular?count={limit}&genreId={genreId}&year={year}
     // возвращает список из первых count фильмов по количеству лайков
     // если значение параметра count не задано, верните первые 10.
-    public List<Film> popularFilm(Integer count, Integer genreId, Integer year) {
-        if (count < 1) {
-            throw new ValidationException("слишком малое число. count должен быть хотя бы 1 а не " + count);
-        }
+    public List<Film> getPopularFilms(Integer count, Integer genreId, Integer year) {
         List<Film> popularFilmList = new ArrayList<>();
         List<Film> filteredFilmList = allFilms();
         List<Integer> filmsId = likeDao.sizeLikeFilmList();
@@ -103,7 +99,6 @@ public class FilmService {
         } else {
             popularFilmList = allFilms().stream()
                     .sorted((x, y) -> y.getId() - x.getId()).collect(Collectors.toList());
-            ;
         }
         if (year != null) {
             filteredFilmList = filteredFilmList.stream()
