@@ -92,7 +92,6 @@ public class FilmDbStorage implements FilmStorage {
         addFilmGenres(filmId, genres);
     }
 
-
     public Set<Genre> getFilmGenres(int filmId) {
         Set<Genre> genres = new HashSet<>(jdbcTemplate.query(format(""
                 + "SELECT f.genre_id, g.name "
@@ -143,6 +142,35 @@ public class FilmDbStorage implements FilmStorage {
         }
     }
 
+    public List<Film> getSearchFilm(String query, String by) {
+        String sql = "SELECT f.*" +
+                "FROM FILMS f " +
+                "LEFT JOIN FILM_DIRECTORS fd ON f.FILM_ID = fd.FILM_ID " +
+                "LEFT JOIN DIRECTORS d ON fd.DIRECTOR_ID = d.ID ";
+        if (by.equals("title")) {
+            return jdbcTemplate.query(sql + "WHERE LOWER(f.NAME) LIKE?",
+                    new FilmMapper(), query);
+        }
+        if (by.equals("director")) {
+            return jdbcTemplate.query(sql + "WHERE LOWER(d.NAME) LIKE ?",
+                    new FilmMapper(), query);
+        }
+        if (by.equals("director,title") || by.equals("title,director")) {
+            return jdbcTemplate.query(sql + "WHERE LOWER(f.NAME) LIKE ? OR LOWER(d.NAME) LIKE ?",
+                    new FilmMapper(), query, query);
+        }
+        return new ArrayList<>();
+    }
+
+    public Set<Integer> getFilmLikes(int filmId) {
+        Set<Integer> likes = new HashSet<>(jdbcTemplate.queryForList(format(""
+                + "SELECT fll.user_id "
+                + "FROM films AS f "
+                + "JOIN film_like_list AS fll ON f.film_id=fll.film_id "
+                + "WHERE f.film_id=%d", filmId), Integer.class));
+        return likes;
+    }
+
     private class FilmMapper implements RowMapper<Film> {
         @Override
         public Film mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -156,6 +184,7 @@ public class FilmDbStorage implements FilmStorage {
             film.setDuration(rs.getInt("duration"));
             film.setMpa(mpa);
             film.setGenres(getFilmGenres(rs.getInt("film_id")));
+            film.setLikes(getFilmLikes(rs.getInt("film_id")));
             return film;
         }
     }

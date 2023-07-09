@@ -75,4 +75,12 @@ public class FilmController {
                                            @RequestParam(value = "sortBy", defaultValue = "likes") String sortBy) {
         return filmService.getDirectorFilmsSort(dirId, sortBy);
     }
+
+    @GetMapping("/films/search") //фильмы по популярности
+    public List<Film> getSearchFilm(@RequestParam String query,
+                                    @RequestParam String by) {
+        log.info("вызван метод getSearchFilm - поиск фильмов по названию и/или режиссеру" +
+                " с query " + query + " с by " + by);
+        return filmService.getSearchFilm(query, by);
+    }
 }
