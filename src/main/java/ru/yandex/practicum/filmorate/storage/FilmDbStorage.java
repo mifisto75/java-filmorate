@@ -153,7 +153,7 @@ public class FilmDbStorage implements FilmStorage {
         }
     }
 
-    public List<Film> getSearchFilm(String query, String by) {
+    public List<Film> getFilmsByQuery(String query, String by) {
         String sql = "SELECT f.*" +
                 "FROM FILMS f " +
                 "LEFT JOIN FILM_DIRECTORS fd ON f.FILM_ID = fd.FILM_ID " +

@@ -77,10 +77,10 @@ public class FilmController {
     }
 
     @GetMapping("/films/search") //фильмы по популярности
-    public List<Film> getSearchFilm(@RequestParam String query,
-                                    @RequestParam String by) {
-        log.info("вызван метод getSearchFilm - поиск фильмов по названию и/или режиссеру" +
+    public List<Film> getFilmsByQuery(@RequestParam String query,
+                                      @RequestParam String by) {
+        log.info("вызван метод getFilmsByQuery - поиск фильмов по названию и/или режиссеру" +
                 " с query " + query + " с by " + by);
-        return filmService.getSearchFilm(query, by);
+        return filmService.getFilmsByQuery(query, by);
     }
 }
