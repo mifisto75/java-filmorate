@@ -45,6 +45,12 @@ public class FilmController {
         return filmService.changeFilm(film);
     }
 
+    @DeleteMapping("/films/{filmId}") // удаление фильма
+    public void deleteFilm(@PathVariable Integer filmId) {
+        log.info("вызван метод deleteFilm - запрос на удаление фильма с id " + filmId);
+        filmService.filmStorage.deleteFilm(filmId);
+    }
+
     @PutMapping("/films/{id}/like/{userId}") //лайк для фильма
     public void likeFilm(@PathVariable Integer id, @PathVariable Integer userId) {
         log.info("вызван метод likeFilm - запрос на добовление лайк для фильма с id " + id + " от пользывателем c id " + userId);
