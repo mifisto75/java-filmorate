@@ -168,7 +168,7 @@ public class FilmDbStorage implements FilmStorage {
                 "LEFT JOIN FILM_DIRECTORS fd ON f.FILM_ID = fd.FILM_ID " +
                 "LEFT JOIN DIRECTORS d ON fd.DIRECTOR_ID = d.ID ";
         if (by.equals("title")) {
-            return jdbcTemplate.query(sql + "WHERE LOWER(f.NAME) LIKE?",
+            return jdbcTemplate.query(sql + "WHERE LOWER(f.NAME) LIKE ?",
                     new FilmMapper(), query);
         }
         if (by.equals("director")) {

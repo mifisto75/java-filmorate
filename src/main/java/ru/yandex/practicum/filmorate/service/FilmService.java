@@ -121,7 +121,7 @@ public class FilmService {
     }
 
     public List<Film> getFilmsByQuery(String query, String by) {
-        if (query.equals(null) || query.equals("")) {
+        if (query.isBlank()) {
             return new ArrayList<>();
         }
         String subString = "%" + query.toLowerCase() + "%";
