@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.Exeptions.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
+import ru.yandex.practicum.filmorate.storage.Dao.DirectorDao;
 import ru.yandex.practicum.filmorate.storage.Dao.MpaDao;
 import ru.yandex.practicum.filmorate.storage.Dao.impl.GenreDaoImpl;
 
@@ -27,17 +28,17 @@ import static java.lang.String.format;
 public class FilmDbStorage implements FilmStorage {
     private final JdbcTemplate jdbcTemplate;
     public static MpaDao mpaDao;
+    public static DirectorDao directorDao;
 
     @Autowired
-    public FilmDbStorage(JdbcTemplate jdbcTemplate, MpaDao mpaDao) {
+    public FilmDbStorage(JdbcTemplate jdbcTemplate, MpaDao mpaDao, DirectorDao directorDao) {
         this.jdbcTemplate = jdbcTemplate;
         FilmDbStorage.mpaDao = mpaDao;
+        FilmDbStorage.directorDao = directorDao;
     }
 
     public List<Film> allFilms() {   //получение всех фильмов.
         return new ArrayList<>(jdbcTemplate.query("SELECT * FROM films", new FilmMapper()));
-
-
     }
 
     public Film addFilm(Film film) { // добавление фильма.
@@ -101,6 +102,16 @@ public class FilmDbStorage implements FilmStorage {
                 + "ORDER BY g.genre_id", filmId), new GenreDaoImpl.GenreMapper()));
         return genres;
     }
+
+//    public Set<Director> getFilmDirectors(int filmId) {
+//        Set<Director> director = new HashSet<>(jdbcTemplate.query(format(""
+//                + "SELECT f.genre_id, g.name "
+//                + "FROM film_genres AS f "
+//                + "LEFT OUTER JOIN genres AS g ON f.genre_id = g.genre_id "
+//                + "WHERE f.film_id=%d "
+//                + "ORDER BY g.genre_id", filmId), new GenreDaoImpl.GenreMapper()));
+//        return director;
+//    }
 
     @Override
     public List<Film> getCommonFilms(Integer userId, Integer friendId) {
@@ -184,7 +195,9 @@ public class FilmDbStorage implements FilmStorage {
             film.setDuration(rs.getInt("duration"));
             film.setMpa(mpa);
             film.setGenres(getFilmGenres(rs.getInt("film_id")));
+
             film.setLikes(getFilmLikes(rs.getInt("film_id")));
+            film.setDirectors(directorDao.getFilmDirectors(rs.getInt("film_id")));
             return film;
         }
     }
