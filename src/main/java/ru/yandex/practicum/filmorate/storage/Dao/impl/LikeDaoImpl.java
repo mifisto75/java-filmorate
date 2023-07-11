@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.Exeptions.NotFoundException;
 import ru.yandex.practicum.filmorate.storage.Dao.LikeDao;
 
-import javax.validation.ValidationException;
-
 import java.util.List;
 
 import static java.lang.String.format;
