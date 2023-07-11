@@ -22,14 +22,14 @@ public class MpaController {
     }
 
     @GetMapping("/mpa")
-    public List<Mpa> allMpa() {
-        log.info("вызван метод allMpa - запрос на список всех MPA");
-        return mpaService.mpaDao.allMpa();
+    public List<Mpa> getAllMpa() {
+        log.info("вызван метод getAllMpa");
+        return mpaService.getAllMpa();
     }
 
     @GetMapping("mpa/{id}")
-    public Mpa getMpaId(@PathVariable int id) {
-        log.info("вызван метод getMpaId - запрос на MPA c ID " + id);
-        return mpaService.mpaDao.getMpaId(id);
+    public Mpa getMpaById(@PathVariable int id) {
+        log.info("вызван метод getMpaById, id: " + id);
+        return mpaService.getMpaById(id);
     }
 }

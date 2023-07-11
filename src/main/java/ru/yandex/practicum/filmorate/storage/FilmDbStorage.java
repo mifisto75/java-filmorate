@@ -136,7 +136,7 @@ public class FilmDbStorage implements FilmStorage {
 
     //GET /films/director/{directorId}?sortBy=[year,likes]
     public List<Film> getDirectorFilmsSort(int dirId, String sort) {
-        List<Film> filmSort = new ArrayList<>();
+        List<Film> filmSort;
         if (sort.equals("year")) {
             filmSort = jdbcTemplate.query("SELECT * FROM films WHERE film_id IN " +
                             "(SELECT film_id FROM film_directors WHERE director_id = ?) ORDER BY release_date LIMIT 10",
@@ -194,7 +194,7 @@ public class FilmDbStorage implements FilmStorage {
     private class FilmMapper implements RowMapper<Film> {
         @Override
         public Film mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Mpa mpa = mpaDao.getMpaId(rs.getInt("rating_id"));
+            Mpa mpa = mpaDao.getMpaById(rs.getInt("rating_id"));
 
             Film film = new Film();
             film.setId(rs.getInt("film_id"));
