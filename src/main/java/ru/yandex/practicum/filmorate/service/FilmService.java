@@ -85,20 +85,34 @@ public class FilmService {
         likeDao.deleteLike(id, userId);
     }
 
-    //GET /films/popular?count={count} — возвращает список из первых count фильмов по количеству лайков. Если значение параметра count не задано, верните первые 10.
-    public List<Film> popularFilm(Integer count) {
-        List<Integer> filmsId = likeDao.sizeLikeFilmList(count);
+    //GET /films/popular?count={limit}&genreId={genreId}&year={year}
+    // возвращает список из первых count фильмов по количеству лайков
+    // если значение параметра count не задано, верните первые 10.
+    public List<Film> getPopularFilms(Integer count, Integer genreId, Integer year) {
         List<Film> popularFilmList = new ArrayList<>();
-        if (filmsId.size() == 0) {
-
-            return allFilms().stream().sorted((x, y) -> y.getLikes().size() - x.getLikes().size())
-                    .limit(count).collect(Collectors.toList());
-        } else {
+        List<Film> filteredFilmList = allFilms();
+        List<Integer> filmsId = likeDao.sizeLikeFilmList();
+        if (filmsId.size() != 0) {
             for (int filmId : filmsId) {
                 popularFilmList.add(filmStorage.getFilmId(filmId));
             }
+        } else {
+            popularFilmList = allFilms().stream()
+                    .sorted((x, y) -> y.getId() - x.getId()).collect(Collectors.toList());
         }
-        return popularFilmList;
+        if (year != null) {
+            filteredFilmList = filteredFilmList.stream()
+                    .filter(film -> film.getReleaseDate().getYear() == year).collect(Collectors.toList());
+        }
+        if (genreId != null) {
+            filteredFilmList = filteredFilmList.stream()
+                    .filter(film -> film.getGenres().contains(genreDao.getGenreId(genreId))).collect(Collectors.toList());
+        }
+        if (year != null || genreId != null) {
+            popularFilmList.retainAll(filteredFilmList);
+        }
+        return popularFilmList.stream()
+                .limit(count).collect(Collectors.toList());
     }
 
     public List<Film> getFilmRecommendations(int userId) {

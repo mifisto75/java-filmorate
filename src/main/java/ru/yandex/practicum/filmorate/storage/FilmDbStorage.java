@@ -103,6 +103,15 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
+    public void deleteFilm(Integer filmId) {
+        try {
+            jdbcTemplate.update("DELETE FROM films WHERE film_id=?", filmId);
+        } catch (EmptyResultDataAccessException e) {
+            throw new NotFoundException("не верный id пользывателя ");
+        }
+    }
+
+    @Override
     public List<Film> getCommonFilms(Integer userId, Integer friendId) {
         String sql =
                 "SELECT f.* FROM films AS f " +

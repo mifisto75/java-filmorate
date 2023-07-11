@@ -16,6 +16,8 @@ public interface UserStorage {
 
     void userExistenceCheck(int id);// проверка наличия в бд
 
+    void deleteUser(int id);//удаление пользователя
+
     //есть гиганское желание переименовать этот клас как UserDao а имплементирующий его UserDaoIml
     // и раскидать их по пакетам . соответственно и с калсоми фильмов
 }

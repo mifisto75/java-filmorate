@@ -53,6 +53,12 @@ public class UserController {
         return userService.userStorage.changeUser(user);
     }
 
+    @DeleteMapping("/users/{userId}") // удаление пользователя
+    public void deleteUser(@PathVariable Integer userId) {
+        log.info("вызван метод deleteUser - запрос на удаление пользователя с id " + userId);
+        userService.userStorage.deleteUser(userId);
+    }
+
     @PutMapping("/users/{id}/friends/{friendId}") // добавить в друзья
     public void addFrends(@PathVariable Integer id, @PathVariable Integer friendId) {
         log.info("вызван метод addFrends - запрос на добовление в друзья пользывателем c id " + id

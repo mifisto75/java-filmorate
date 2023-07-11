@@ -11,6 +11,7 @@ import ru.yandex.practicum.filmorate.storage.Dao.EventDao;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.time.Instant;
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 @Slf4j
@@ -50,6 +51,12 @@ public class FilmController {
         return filmService.changeFilm(film);
     }
 
+    @DeleteMapping("/films/{filmId}") // удаление фильма
+    public void deleteFilm(@PathVariable Integer filmId) {
+        log.info("вызван метод deleteFilm - запрос на удаление фильма с id " + filmId);
+        filmService.filmStorage.deleteFilm(filmId);
+    }
+
     @PutMapping("/films/{id}/like/{userId}") //лайк для фильма
     public void likeFilm(@PathVariable Integer id, @PathVariable Integer userId) {
         log.info("вызван метод likeFilm - запрос на добовление лайк для фильма с id " + id + " от пользывателем c id " + userId);
@@ -66,10 +73,13 @@ public class FilmController {
                 "REMOVE", id));
     }
 
-    @GetMapping("/films/popular")
-    public List<Film> popularFilm(@RequestParam(name = "count", defaultValue = "10") Integer count) { // фильмы по популярности
-        log.info("вызван метод popularFilm - запрос на писок фильмов по популярности с count " + count);
-        return filmService.popularFilm(count);
+    @GetMapping("/films/popular") // фильмы по популярности
+    public List<Film> getPopularFilms(@RequestParam(defaultValue = "10") @Positive Integer count,
+                                      @RequestParam(required = false) Integer genreId,
+                                      @RequestParam(required = false) Integer year) {
+        log.info("вызван метод getPopularFilms - запрос на список фильмов по популярности " +
+                "с count " + count + ", genreId " + genreId + ", year " + year);
+        return filmService.getPopularFilms(count, genreId, year);
     }
 
     @GetMapping("/films/common")
