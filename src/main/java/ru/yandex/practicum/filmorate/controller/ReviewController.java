@@ -3,11 +3,14 @@ package ru.yandex.practicum.filmorate.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.model.Event;
 import ru.yandex.practicum.filmorate.model.Review;
 import ru.yandex.practicum.filmorate.service.ReviewService;
+import ru.yandex.practicum.filmorate.storage.Dao.EventDao;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.time.Instant;
 import java.util.List;
 
 @Slf4j
@@ -16,29 +19,43 @@ public class ReviewController {
 
 
     private final ReviewService reviewService;
+    private final EventDao eventDao;
 
     @Autowired
-    public ReviewController(ReviewService reviewService) {
+    public ReviewController(ReviewService reviewService, EventDao eventDao) {
         this.reviewService = reviewService;
+        this.eventDao = eventDao;
     }
 
 
     @PostMapping("/reviews") //Добавление нового отзыва.
     public Review addReview(@Valid @RequestBody Review review) {
         log.info("вызван метод addReview " + review);
-        return reviewService.addReview(review);
+        Review newReview = reviewService.addReview(review);
+        eventDao.addEvent(new Event(Instant.now().toEpochMilli(), newReview.getUserId(),
+                "REVIEW", "ADD",
+                newReview.getReviewId()));
+        return newReview;
     }
 
     @PutMapping("/reviews") //Редактирование уже имеющегося отзыва.
     public Review changeReview(@Valid @RequestBody Review review) {
         log.info("вызван метод changeReview " + review);
-        return reviewService.changeReview(review);
+        Review updatedReview = reviewService.changeReview(review);
+        eventDao.addEvent(new Event(Instant.now().toEpochMilli(), updatedReview.getUserId(),
+                "REVIEW", "UPDATE",
+                updatedReview.getReviewId()));
+        return updatedReview;
     }
 
     @DeleteMapping("/reviews/{id}") //Удаление уже имеющегося отзыва.
     public void deleteReview(@PathVariable Integer id) {
         log.info("вызван метод deleteReview " + id);
+        Review review = reviewService.getReview(id);
         reviewService.deleteReview(id);
+        eventDao.addEvent(new Event(Instant.now().toEpochMilli(), review.getUserId(),
+                "REVIEW", "REMOVE",
+                review.getReviewId()));
     }
 
     @GetMapping("/reviews/{id}") //Получение отзыва по идентификатору.

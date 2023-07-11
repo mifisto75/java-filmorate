@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.Exeptions.NotFoundException;
 import ru.yandex.practicum.filmorate.storage.Dao.LikeDao;
 
 import javax.validation.ValidationException;
+
 import java.util.List;
 
 import static java.lang.String.format;
@@ -47,11 +48,8 @@ public class LikeDaoImpl implements LikeDao {
     }
 
     @Override
-    public List<Integer> sizeLikeFilmList(int count) {
-        if (count < 1) {
-            throw new ValidationException("слишком малое число. count должен быть хотябы 1 а не " + count);
-        }
-        return jdbcTemplate.queryForList(format("SELECT film_id FROM (SELECT film_id, COUNT(user_id) as count_users " +
-                "FROM film_like_list GROUP BY film_id) as subquery ORDER BY count_users DESC LIMIT %d", count), Integer.class);
+    public List<Integer> sizeLikeFilmList() {
+        return jdbcTemplate.queryForList("SELECT film_id FROM (SELECT film_id, COUNT(user_id) as count_users " +
+                "FROM film_like_list GROUP BY film_id) as subquery ORDER BY count_users DESC", Integer.class);
     }
 }
