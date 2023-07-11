@@ -3,14 +3,12 @@ package ru.yandex.practicum.filmorate.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.model.Event;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.storage.Dao.EventDao;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import java.time.Instant;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
@@ -19,72 +17,66 @@ import java.util.List;
 public class FilmController {
 
     private final FilmService filmService;
-    private final EventDao eventDao;
 
     @Autowired
     public FilmController(FilmService filmService, EventDao eventDao) {
         this.filmService = filmService;
-        this.eventDao = eventDao;
     }
 
     @GetMapping("/films") //получение всех фильмов.
-    public List allFilms() {
-        log.info("вызван метод allFilms - запрос на список всех фильмов");
-        return filmService.allFilms();
+    public List<Film> getAllFilms() {
+        log.info("вызван метод getAllFilms");
+        return filmService.getAllFilms();
     }
 
     @GetMapping("/films/{id}") //вернуть фильм по id.
-    public Film getFilmId(@PathVariable Integer id) {
-        log.info("вызван метод getFilmId - запрос на фильм с id " + id);
-        return filmService.getFilmId(id);
+    public Film getFilmById(@PathVariable Integer id) {
+        log.info("вызван метод getFilmById, id: " + id);
+        return filmService.getFilmById(id);
     }
 
     @PostMapping("/films") // добавление фильма.
     public Film addFilm(@Valid @RequestBody Film film) {
-        log.info("вызван метод addFilm - запрос на добавление фильма " + film);
+        log.info("вызван метод addFilm, film: " + film);
         return filmService.addFilm(film);
     }
 
     @PutMapping("/films") // обновление фильма.
     public Film changeFilm(@Valid @RequestBody Film film) {
-        log.info("вызван метод changeFilm - запрос на обновление фильма " + film);
+        log.info("вызван метод changeFilm, film: " + film);
         return filmService.changeFilm(film);
     }
 
     @DeleteMapping("/films/{filmId}") // удаление фильма
-    public void deleteFilm(@PathVariable Integer filmId) {
-        log.info("вызван метод deleteFilm - запрос на удаление фильма с id " + filmId);
-        filmService.filmStorage.deleteFilm(filmId);
+    public void deleteFilmById(@PathVariable Integer filmId) {
+        log.info("вызван метод deleteFilmById, id: " + filmId);
+        filmService.deleteFilmById(filmId);
     }
 
     @PutMapping("/films/{id}/like/{userId}") //лайк для фильма
-    public void likeFilm(@PathVariable Integer id, @PathVariable Integer userId) {
-        log.info("вызван метод likeFilm - запрос на добовление лайк для фильма с id " + id + " от пользывателем c id " + userId);
-        filmService.likeFilm(id, userId);
-        eventDao.addEvent(new Event(Instant.now().toEpochMilli(), userId, "LIKE",
-                "ADD", id));
+    public void addFilmLike(@PathVariable Integer id, @PathVariable Integer userId) {
+        log.info("вызван метод addLikeFilm, filmId: " + id + ", userId: " + userId);
+        filmService.addFilmLike(id, userId);
     }
 
     @DeleteMapping("/films/{id}/like/{userId}") //убрать лайк для фильма
-    public void deletLikeFilm(@PathVariable Integer id, @PathVariable Integer userId) {
-        log.info("вызван метод deletLikeFilm - запрос на удаление лайк для фильма с id " + id + " от пользывателем c id " + userId);
+    public void deleteLikeFilm(@PathVariable Integer id, @PathVariable Integer userId) {
+        log.info("вызван метод deleteLikeFilm, filmId: " + id + ", userId: " + userId);
         filmService.deleteLikeFilm(id, userId);
-        eventDao.addEvent(new Event(Instant.now().toEpochMilli(), userId, "LIKE",
-                "REMOVE", id));
     }
 
     @GetMapping("/films/popular") // фильмы по популярности
     public List<Film> getPopularFilms(@RequestParam(defaultValue = "10") @Positive Integer count,
                                       @RequestParam(required = false) Integer genreId,
                                       @RequestParam(required = false) Integer year) {
-        log.info("вызван метод getPopularFilms - запрос на список фильмов по популярности " +
-                "с count " + count + ", genreId " + genreId + ", year " + year);
+        log.info("вызван метод getPopularFilms, count: " + count + ", genreId: " + genreId + ", year: " + year);
         return filmService.getPopularFilms(count, genreId, year);
     }
 
     @GetMapping("/films/common")
-    public List<Film> getCommonFilms(@RequestParam Integer userId, @RequestParam Integer friendId) { // общие фильмы по популярности
-        log.info("вызван метод getCommonFilms - - запрос на список общих друзей пользователем c id "
+    // общие фильмы по популярности
+    public List<Film> getCommonFilms(@RequestParam Integer userId, @RequestParam Integer friendId) {
+        log.info("вызван метод getCommonFilms - запрос на список общих друзей пользователем c id "
                 + userId + " пользователя с id " + friendId);
         return filmService.getCommonFilms(userId, friendId);
     }
@@ -92,6 +84,7 @@ public class FilmController {
     @GetMapping("/films/director/{directorId}")
     public List<Film> getDirectorFilmsSort(@PathVariable("directorId") @Min(1) int dirId,
                                            @RequestParam(value = "sortBy", defaultValue = "likes") String sortBy) {
+        log.info("вызван метод getDirectorFilmsSort, directorId: {}, sortBy: {}", dirId, sortBy);
         return filmService.getDirectorFilmsSort(dirId, sortBy);
     }
 
