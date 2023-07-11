@@ -133,4 +133,14 @@ public class FilmService {
         });
         return films;
     }
+
+    public List<Film> getFilmsByQuery(String query, String by) {
+        if (query.isBlank()) {
+            return new ArrayList<>();
+        }
+        String subString = "%" + query.toLowerCase() + "%";
+        return filmStorage.getFilmsByQuery(subString, by).stream()
+                .sorted((x, y) -> y.getLikes().size() - x.getLikes().size())
+                .collect(Collectors.toList());
+    }
 }

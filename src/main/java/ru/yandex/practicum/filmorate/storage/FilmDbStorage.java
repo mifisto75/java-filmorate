@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.Exeptions.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
+import ru.yandex.practicum.filmorate.storage.Dao.DirectorDao;
 import ru.yandex.practicum.filmorate.storage.Dao.MpaDao;
 import ru.yandex.practicum.filmorate.storage.Dao.impl.GenreDaoImpl;
 
@@ -27,17 +28,17 @@ import static java.lang.String.format;
 public class FilmDbStorage implements FilmStorage {
     private final JdbcTemplate jdbcTemplate;
     public static MpaDao mpaDao;
+    public static DirectorDao directorDao;
 
     @Autowired
-    public FilmDbStorage(JdbcTemplate jdbcTemplate, MpaDao mpaDao) {
+    public FilmDbStorage(JdbcTemplate jdbcTemplate, MpaDao mpaDao, DirectorDao directorDao) {
         this.jdbcTemplate = jdbcTemplate;
         FilmDbStorage.mpaDao = mpaDao;
+        FilmDbStorage.directorDao = directorDao;
     }
 
     public List<Film> allFilms() {   //получение всех фильмов.
         return new ArrayList<>(jdbcTemplate.query("SELECT * FROM films", new FilmMapper()));
-
-
     }
 
     public Film addFilm(Film film) { // добавление фильма.
@@ -102,6 +103,16 @@ public class FilmDbStorage implements FilmStorage {
         return genres;
     }
 
+//    public Set<Director> getFilmDirectors(int filmId) {
+//        Set<Director> director = new HashSet<>(jdbcTemplate.query(format(""
+//                + "SELECT f.genre_id, g.name "
+//                + "FROM film_genres AS f "
+//                + "LEFT OUTER JOIN genres AS g ON f.genre_id = g.genre_id "
+//                + "WHERE f.film_id=%d "
+//                + "ORDER BY g.genre_id", filmId), new GenreDaoImpl.GenreMapper()));
+//        return director;
+//    }
+
     @Override
     public void deleteFilm(Integer filmId) {
         try {
@@ -151,6 +162,35 @@ public class FilmDbStorage implements FilmStorage {
         }
     }
 
+    public List<Film> getFilmsByQuery(String query, String by) {
+        String sql = "SELECT f.*" +
+                "FROM FILMS f " +
+                "LEFT JOIN FILM_DIRECTORS fd ON f.FILM_ID = fd.FILM_ID " +
+                "LEFT JOIN DIRECTORS d ON fd.DIRECTOR_ID = d.ID ";
+        if (by.equals("title")) {
+            return jdbcTemplate.query(sql + "WHERE LOWER(f.NAME) LIKE ?",
+                    new FilmMapper(), query);
+        }
+        if (by.equals("director")) {
+            return jdbcTemplate.query(sql + "WHERE LOWER(d.NAME) LIKE ?",
+                    new FilmMapper(), query);
+        }
+        if (by.equals("director,title") || by.equals("title,director")) {
+            return jdbcTemplate.query(sql + "WHERE LOWER(f.NAME) LIKE ? OR LOWER(d.NAME) LIKE ?",
+                    new FilmMapper(), query, query);
+        }
+        return new ArrayList<>();
+    }
+
+    public Set<Integer> getFilmLikes(int filmId) {
+        Set<Integer> likes = new HashSet<>(jdbcTemplate.queryForList(format(""
+                + "SELECT fll.user_id "
+                + "FROM films AS f "
+                + "JOIN film_like_list AS fll ON f.film_id=fll.film_id "
+                + "WHERE f.film_id=%d", filmId), Integer.class));
+        return likes;
+    }
+
     private class FilmMapper implements RowMapper<Film> {
         @Override
         public Film mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -164,6 +204,9 @@ public class FilmDbStorage implements FilmStorage {
             film.setDuration(rs.getInt("duration"));
             film.setMpa(mpa);
             film.setGenres(getFilmGenres(rs.getInt("film_id")));
+
+            film.setLikes(getFilmLikes(rs.getInt("film_id")));
+            film.setDirectors(directorDao.getFilmDirectors(rs.getInt("film_id")));
             return film;
         }
     }
