@@ -8,6 +8,5 @@ public interface LikeDao {
 
     void deleteLike(int filmId, int userId);
 
-    List<Integer> sizeLikeFilmList(int count);
-
+    List<Integer> sizeLikeFilmList();
 }

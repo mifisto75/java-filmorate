@@ -28,7 +28,7 @@ public class MpaDaoImpl implements MpaDao {
     }
 
     @Override
-    public Mpa getMpaId(int id) {
+    public Mpa getMpaById(int id) {
         try {
             return jdbcTemplate.queryForObject(format("SELECT * FROM mpa_ratings WHERE rating_id=%d", id), new MpaMapper());
         } catch (EmptyResultDataAccessException e) {
@@ -37,7 +37,7 @@ public class MpaDaoImpl implements MpaDao {
     }
 
     @Override
-    public List<Mpa> allMpa() {
+    public List<Mpa> getAllMpa() {
         return  new ArrayList<>(jdbcTemplate.query("SELECT * FROM mpa_ratings ORDER BY rating_id", new MpaMapper()));
     }
 
