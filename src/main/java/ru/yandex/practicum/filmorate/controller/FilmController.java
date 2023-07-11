@@ -3,11 +3,14 @@ package ru.yandex.practicum.filmorate.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.model.Event;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.storage.Dao.EventDao;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import java.time.Instant;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
@@ -16,10 +19,12 @@ import java.util.List;
 public class FilmController {
 
     private final FilmService filmService;
+    private final EventDao eventDao;
 
     @Autowired
-    public FilmController(FilmService filmService) {
+    public FilmController(FilmService filmService, EventDao eventDao) {
         this.filmService = filmService;
+        this.eventDao = eventDao;
     }
 
     @GetMapping("/films") //получение всех фильмов.
@@ -56,12 +61,16 @@ public class FilmController {
     public void likeFilm(@PathVariable Integer id, @PathVariable Integer userId) {
         log.info("вызван метод likeFilm - запрос на добовление лайк для фильма с id " + id + " от пользывателем c id " + userId);
         filmService.likeFilm(id, userId);
+        eventDao.addEvent(new Event(Instant.now().toEpochMilli(), userId, "LIKE",
+                "ADD", id));
     }
 
     @DeleteMapping("/films/{id}/like/{userId}") //убрать лайк для фильма
     public void deletLikeFilm(@PathVariable Integer id, @PathVariable Integer userId) {
         log.info("вызван метод deletLikeFilm - запрос на удаление лайк для фильма с id " + id + " от пользывателем c id " + userId);
         filmService.deleteLikeFilm(id, userId);
+        eventDao.addEvent(new Event(Instant.now().toEpochMilli(), userId, "LIKE",
+                "REMOVE", id));
     }
 
     @GetMapping("/films/popular") // фильмы по популярности

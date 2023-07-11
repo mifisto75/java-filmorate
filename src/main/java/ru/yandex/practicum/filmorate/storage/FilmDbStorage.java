@@ -92,7 +92,6 @@ public class FilmDbStorage implements FilmStorage {
         addFilmGenres(filmId, genres);
     }
 
-
     public Set<Genre> getFilmGenres(int filmId) {
         Set<Genre> genres = new HashSet<>(jdbcTemplate.query(format(""
                 + "SELECT f.genre_id, g.name "
