@@ -77,16 +77,16 @@ public class FilmService {
 
     //PUT /films/{id}/like/{userId} — пользователь ставит лайк фильму.
     public void addFilmLike(int id, int userId) {
-        likeDao.addLike(id, userId);
         eventDao.addEvent(new Event(Instant.now().toEpochMilli(), userId, "LIKE",
                 "ADD", id));
+        likeDao.addLike(id, userId);
     }
 
     //DELETE /films/{id}/like/{userId} — пользователь удаляет лайк.
     public void deleteLikeFilm(int id, int userId) {
-        likeDao.deleteLike(id, userId);
         eventDao.addEvent(new Event(Instant.now().toEpochMilli(), userId, "LIKE",
                 "REMOVE", id));
+        likeDao.deleteLike(id, userId);
     }
 
     //GET /films/popular?count={limit}&genreId={genreId}&year={year}

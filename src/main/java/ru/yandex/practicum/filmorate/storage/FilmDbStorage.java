@@ -103,16 +103,6 @@ public class FilmDbStorage implements FilmStorage {
         return genres;
     }
 
-//    public Set<Director> getFilmDirectors(int filmId) {
-//        Set<Director> director = new HashSet<>(jdbcTemplate.query(format(""
-//                + "SELECT f.genre_id, g.name "
-//                + "FROM film_genres AS f "
-//                + "LEFT OUTER JOIN genres AS g ON f.genre_id = g.genre_id "
-//                + "WHERE f.film_id=%d "
-//                + "ORDER BY g.genre_id", filmId), new GenreDaoImpl.GenreMapper()));
-//        return director;
-//    }
-
     @Override
     public void deleteFilm(Integer filmId) {
         try {
