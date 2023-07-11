@@ -5,7 +5,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.Exeptions.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Review;
 import ru.yandex.practicum.filmorate.storage.Dao.ReviewDao;
@@ -74,13 +73,13 @@ public class ReviewDaoImpl implements ReviewDao {
     @Override
     public List<Review> getTopReviewsFilm(int filmId, int count) { //Получение всех отзывов по идентификатору фильма
         if (filmId != 0) {
-            return new ArrayList<Review>(jdbcTemplate.query(format("SELECT * FROM reviews WHERE film_id=%d ",
+            return new ArrayList<>(jdbcTemplate.query(format("SELECT * FROM reviews WHERE film_id=%d ",
                     filmId), new ReviewMapper(jdbcTemplate))).stream()
                     .sorted(Comparator.comparing(Review::getUseful).reversed())
                     .limit(count)
                     .collect(Collectors.toList());
         } else {
-            return new ArrayList<Review>(jdbcTemplate.query("SELECT * FROM reviews ",
+            return new ArrayList<>(jdbcTemplate.query("SELECT * FROM reviews ",
                     new ReviewMapper(jdbcTemplate))).stream()
                     .sorted(Comparator.comparing(Review::getUseful).reversed())
                     .limit(count)

@@ -21,14 +21,14 @@ public class GenreController {
     }
 
     @GetMapping("/genres")
-    public List<Genre> allGenre() {
-        log.info("вызван метод allGenre - запрос на список всех aGenre");
-        return genreService.genreDao.allGenre();
+    public List<Genre> getAllGenres() {
+        log.info("вызван метод getAllGenres");
+        return genreService.getAllGenres();
     }
 
     @GetMapping("/genres/{id}")
-    public Genre getGenreId(@PathVariable int id) {
-        log.info("вызван метод getGenreId - запрос на Genre c Id " + id);
-        return genreService.genreDao.getGenreId(id);
+    public Genre getGenreById(@PathVariable int id) {
+        log.info("вызван метод getGenreById, id: " + id);
+        return genreService.getGenreById(id);
     }
 }
