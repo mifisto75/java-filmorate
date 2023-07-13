@@ -76,8 +76,8 @@ public class FilmController {
     @GetMapping("/films/common")
     // общие фильмы по популярности
     public List<Film> getCommonFilms(@RequestParam Integer userId, @RequestParam Integer friendId) {
-        log.info("вызван метод getCommonFilms - запрос на список общих друзей пользователем c id "
-                + userId + " пользователя с id " + friendId);
+        log.info("вызван метод getCommonFilms - запрос на список общих фильмов пользователя c id "
+                + userId + ", совпадающих с пользователем с id " + friendId);
         return filmService.getCommonFilms(userId, friendId);
     }
 

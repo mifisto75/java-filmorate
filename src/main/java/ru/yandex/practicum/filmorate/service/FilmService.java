@@ -5,6 +5,7 @@ import ru.yandex.practicum.filmorate.model.Event;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.Dao.*;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -19,20 +20,19 @@ public class FilmService {
     private GenreDao genreDao;
     private LikeDao likeDao;
     private MpaDao mpaDao;
-    private RecommendationService recommendationService;
     private DirectorDao directorDao;
     private EventDao eventDao;
+    private UserStorage userStorage;
 
     public FilmService(FilmStorage filmStorage, GenreDao genreDao, LikeDao likeDao,
-                       MpaDao mpaDao, DirectorDao directorDao, RecommendationService recommendationService,
-                       EventDao eventDao) {
+                       MpaDao mpaDao, DirectorDao directorDao, EventDao eventDao, UserStorage userStorage) {
         this.filmStorage = filmStorage;
         this.genreDao = genreDao;
         this.likeDao = likeDao;
         this.mpaDao = mpaDao;
         this.directorDao = directorDao;
-        this.recommendationService = recommendationService;
         this.eventDao = eventDao;
+        this.userStorage = userStorage;
     }
 
     public List<Film> getAllFilms() { // все фильмы с заполнеными полями жанр и рейтинг
@@ -119,12 +119,10 @@ public class FilmService {
                 .limit(count).collect(Collectors.toList());
     }
 
-    public List<Film> getFilmRecommendations(int userId) {
-        return recommendationService.getRecommendedFilms(userId);
-    }
-
     //GET/films/common?userId={userId}&friendId={friendId} - возвращает список общих с другом фильмов с сортировкой по их популярности.
     public List<Film> getCommonFilms(Integer userId, Integer friendId) {
+        userStorage.userExistenceCheck(userId);
+        userStorage.userExistenceCheck(friendId);
         return filmStorage.getCommonFilms(userId, friendId);
     }
 
