@@ -29,7 +29,7 @@ public class ReviewService {
 
     public Review addReview(Review review) { //Добавление нового отзыва.
         filmStorage.getFilmId(review.getFilmId());//проверка на наличие фильма
-        userStorage.getUserById(review.getUserId());//проверка на наличие юзера
+        userStorage.userExistenceCheck(review.getUserId());//проверка на наличие юзера
         Review newReview = reviewDao.addReview(review);
         eventDao.addEvent(new Event(Instant.now().toEpochMilli(), newReview.getUserId(),
                 "REVIEW", "ADD",
