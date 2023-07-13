@@ -3,10 +3,11 @@ package ru.yandex.practicum.filmorate.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.model.*;
-import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.model.Event;
+import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.RecommendationService;
 import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.storage.Dao.EventDao;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -16,12 +17,12 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final FilmService filmService;
+    private final RecommendationService recommendationService;
 
     @Autowired
-    public UserController(UserService userService, FilmService filmService, EventDao eventDao) {
+    public UserController(UserService userService, RecommendationService recommendationService) {
         this.userService = userService;
-        this.filmService = filmService;
+        this.recommendationService = recommendationService;
     }
 
     @GetMapping("/users") // получение списка всех пользователей.
@@ -84,7 +85,7 @@ public class UserController {
     @GetMapping("/users/{id}/recommendations") // рекомендация для пользователя по id
     public List<Film> getFilmRecommendations(@PathVariable int id) {
         log.info("вызван метод getFilmRecommendations для пользователя с id: {}", id);
-        return filmService.getFilmRecommendations(id);
+        return recommendationService.getRecommendedFilms(id);
     }
 
     @GetMapping("/users/{id}/feed") //вернуть список последних действий пользователя по id.

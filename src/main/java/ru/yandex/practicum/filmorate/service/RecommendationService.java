@@ -2,14 +2,13 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Like;
+import ru.yandex.practicum.filmorate.storage.Dao.LikeDao;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -17,13 +16,15 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class RecommendationService {
-    private final JdbcTemplate jdbcTemplate;
     private final FilmStorage filmStorage;
+    private final LikeDao likeDao;
+    private final UserStorage userStorage;
 
     public List<Film> getRecommendedFilms(Integer id) {
-
-        List<Like> allLikes = jdbcTemplate.query("SELECT * FROM film_like_list", this::rsToLike);
-        // получаем список id всех пользователей и список id фильмов, который они пролайкали.
+        userStorage.userExistenceCheck(id);
+        // получаем список всех лайков
+        List<Like> allLikes = likeDao.getAllLikes();
+        // получаем список id всех пользователей и список id фильмов, который они пролайкали
         Map<Integer, List<Integer>> usersAndLikedFilmsIds = makeMapOfUsersAndLikes(allLikes);
         // получаем список рекомендаций для пользователя
         List<Integer> listOfRecommendedFilmsIds = makeRecommendationsList(usersAndLikedFilmsIds, id);
@@ -89,14 +90,5 @@ public class RecommendationService {
         List<T> result = new ArrayList<>(first);
         result.addAll(second);
         return result;
-    }
-
-    private Like rsToLike(ResultSet rs, int rowNum) throws SQLException {
-        int filmId = rs.getInt("film_id");
-        int userId = rs.getInt("user_id");
-        return Like.builder()
-                .filmId(filmId)
-                .userId(userId)
-                .build();
     }
 }

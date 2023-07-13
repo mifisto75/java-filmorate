@@ -24,40 +24,40 @@ public class DirectorController {
 
     @GetMapping //Получение всех режиссеров
     public List<Director> getAllDirs() {
-        log.debug("Получен запрос GET (getAllDirs)");
+        log.info("Получен запрос GET (getAllDirs)");
         final List<Director> dirs = directorService.getAllDirs();
-        log.debug("Получен ответ GET (getAllDirs) dirs: {}", dirs);
+        log.info("Получен ответ GET (getAllDirs) dirs: {}", dirs);
         return dirs;
     }
 
     @GetMapping(value = "/{id}") //Получение режиссера по id
     public Director getDirById(@PathVariable("id") @Min(1) int id) {
-        log.debug("Получен запрос GET (getDirById)");
+        log.info("Получен запрос GET (getDirById)");
         final Director dir = directorService.getDirById(id);
-        log.debug("Получен ответ GET (getDirById) dir: {}", dir);
+        log.info("Получен ответ GET (getDirById) dir: {}", dir);
         return dir;
     }
 
     @PostMapping //Создание режиссера
     public Director createDir(@RequestBody @Valid Director dir) {
-        log.debug("Получен запрос POST (createDir)");
+        log.info("Получен запрос POST (createDir)");
         final Director dirDB = directorService.createDir(dir);
-        log.debug("Получен ответ POST (createDir) dir: {}", dirDB);
+        log.info("Получен ответ POST (createDir) dir: {}", dirDB);
         return dirDB;
     }
 
     @PutMapping //Изменение режиссера
     public Director updateDir(@RequestBody @Valid Director dir) {
-        log.debug("Получен запрос PUT (updateDir)");
+        log.info("Получен запрос PUT (updateDir)");
         final Director dirDB = directorService.updateDir(dir);
-        log.debug("Получен ответ PUT (updateDir) dir: {}", dirDB);
+        log.info("Получен ответ PUT (updateDir) dir: {}", dirDB);
         return dirDB;
     }
 
     @DeleteMapping(value = "/{id}") //Удаление режиссёра
     public void deleteDirById(@PathVariable("id") @Min(1) int id) {
-        log.debug("Получен запрос DELETE (deleteDirById)");
+        log.info("Получен запрос DELETE (deleteDirById)");
         directorService.deleteDirById(id);
-        log.debug("Режиссер успешно удален");
+        log.info("Режиссер успешно удален");
     }
 }
