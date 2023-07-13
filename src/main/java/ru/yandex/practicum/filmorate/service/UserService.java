@@ -2,6 +2,8 @@ package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Event;
+import ru.yandex.practicum.filmorate.model.EventType;
+import ru.yandex.practicum.filmorate.model.OperationType;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.Dao.EventDao;
 import ru.yandex.practicum.filmorate.storage.Dao.FriendListDao;
@@ -50,15 +52,15 @@ public class UserService {
         userStorage.userExistenceCheck(id);
         boolean status = userStorage.getUserById(friendId).getFriends().contains(id);
         friendListDao.addFriends(id, friendId, status);
-        eventDao.addEvent(new Event(Instant.now().toEpochMilli(), id, "FRIEND",
-                "ADD", friendId));
+        eventDao.addEvent(new Event(Instant.now().toEpochMilli(), id, EventType.FRIEND,
+                OperationType.ADD, friendId));
     }
 
     //DELETE /users/{id}/friends/{friendId} — удаление из друзей.
     public void deleteFriends(int id, int friendId) {
         friendListDao.deleteFriends(id, friendId);
-        eventDao.addEvent(new Event(Instant.now().toEpochMilli(), id, "FRIEND",
-                "REMOVE", friendId));
+        eventDao.addEvent(new Event(Instant.now().toEpochMilli(), id, EventType.FRIEND,
+                OperationType.REMOVE, friendId));
     }
 
     //GET /users/{id}/friends — возвращаем список пользователей, являющихся его друзьями.

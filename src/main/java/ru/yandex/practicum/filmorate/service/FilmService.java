@@ -2,7 +2,9 @@ package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Event;
+import ru.yandex.practicum.filmorate.model.EventType;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.OperationType;
 import ru.yandex.practicum.filmorate.storage.Dao.*;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
@@ -77,15 +79,15 @@ public class FilmService {
 
     //PUT /films/{id}/like/{userId} — пользователь ставит лайк фильму.
     public void addFilmLike(int id, int userId) {
-        eventDao.addEvent(new Event(Instant.now().toEpochMilli(), userId, "LIKE",
-                "ADD", id));
+        eventDao.addEvent(new Event(Instant.now().toEpochMilli(), userId, EventType.LIKE,
+                OperationType.ADD, id));
         likeDao.addLike(id, userId);
     }
 
     //DELETE /films/{id}/like/{userId} — пользователь удаляет лайк.
     public void deleteLikeFilm(int id, int userId) {
-        eventDao.addEvent(new Event(Instant.now().toEpochMilli(), userId, "LIKE",
-                "REMOVE", id));
+        eventDao.addEvent(new Event(Instant.now().toEpochMilli(), userId, EventType.LIKE,
+                OperationType.REMOVE, id));
         likeDao.deleteLike(id, userId);
     }
 

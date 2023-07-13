@@ -2,6 +2,8 @@ package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Event;
+import ru.yandex.practicum.filmorate.model.EventType;
+import ru.yandex.practicum.filmorate.model.OperationType;
 import ru.yandex.practicum.filmorate.model.Review;
 import ru.yandex.practicum.filmorate.storage.Dao.EventDao;
 import ru.yandex.practicum.filmorate.storage.Dao.ReviewDao;
@@ -32,7 +34,7 @@ public class ReviewService {
         userStorage.userExistenceCheck(review.getUserId());//проверка на наличие юзера
         Review newReview = reviewDao.addReview(review);
         eventDao.addEvent(new Event(Instant.now().toEpochMilli(), newReview.getUserId(),
-                "REVIEW", "ADD",
+                EventType.REVIEW, OperationType.ADD,
                 newReview.getReviewId()));
         return newReview;
     }
@@ -41,7 +43,7 @@ public class ReviewService {
         reviewDao.getReview(review.getReviewId()); //если не будет отзыва, то метод выбросит исключение
         Review updatedReview = reviewDao.changeReview(review);
         eventDao.addEvent(new Event(Instant.now().toEpochMilli(), updatedReview.getUserId(),
-                "REVIEW", "UPDATE",
+                EventType.REVIEW, OperationType.UPDATE,
                 updatedReview.getReviewId()));
         return updatedReview;
     }
@@ -50,7 +52,7 @@ public class ReviewService {
         Review review = reviewDao.getReview(id);
         reviewDao.deleteReview(id);
         eventDao.addEvent(new Event(Instant.now().toEpochMilli(), review.getUserId(),
-                "REVIEW", "REMOVE",
+                EventType.REVIEW, OperationType.REMOVE,
                 review.getReviewId()));
     }
 

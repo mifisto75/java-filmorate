@@ -108,7 +108,7 @@ public class FilmDbStorage implements FilmStorage {
         try {
             jdbcTemplate.update("DELETE FROM films WHERE film_id=?", filmId);
         } catch (EmptyResultDataAccessException e) {
-            throw new NotFoundException("не верный id пользывателя ");
+            throw new NotFoundException("не верный id фильма: " + filmId);
         }
     }
 
