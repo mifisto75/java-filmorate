@@ -2,9 +2,9 @@ package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Event;
-import ru.yandex.practicum.filmorate.model.EventType;
+import ru.yandex.practicum.filmorate.model.type.EventType;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.OperationType;
+import ru.yandex.practicum.filmorate.model.type.OperationType;
 import ru.yandex.practicum.filmorate.storage.Dao.*;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
@@ -18,13 +18,13 @@ import java.util.stream.Collectors;
 @Service
 public class FilmService {
 
-    private FilmStorage filmStorage;
-    private GenreDao genreDao;
-    private LikeDao likeDao;
-    private MpaDao mpaDao;
-    private DirectorDao directorDao;
-    private EventDao eventDao;
-    private UserStorage userStorage;
+    private final FilmStorage filmStorage;
+    private final GenreDao genreDao;
+    private final LikeDao likeDao;
+    private final MpaDao mpaDao;
+    private final DirectorDao directorDao;
+    private final EventDao eventDao;
+    private final UserStorage userStorage;
 
     public FilmService(FilmStorage filmStorage, GenreDao genreDao, LikeDao likeDao,
                        MpaDao mpaDao, DirectorDao directorDao, EventDao eventDao, UserStorage userStorage) {

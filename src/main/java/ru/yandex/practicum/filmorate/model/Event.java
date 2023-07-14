@@ -3,7 +3,8 @@ package ru.yandex.practicum.filmorate.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.yandex.practicum.filmorate.storage.Dao.impl.EventDaoImpl;
+import ru.yandex.practicum.filmorate.model.type.EventType;
+import ru.yandex.practicum.filmorate.model.type.OperationType;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;

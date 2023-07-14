@@ -2,8 +2,8 @@ package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Event;
-import ru.yandex.practicum.filmorate.model.EventType;
-import ru.yandex.practicum.filmorate.model.OperationType;
+import ru.yandex.practicum.filmorate.model.type.EventType;
+import ru.yandex.practicum.filmorate.model.type.OperationType;
 import ru.yandex.practicum.filmorate.model.Review;
 import ru.yandex.practicum.filmorate.storage.Dao.EventDao;
 import ru.yandex.practicum.filmorate.storage.Dao.ReviewDao;
@@ -17,10 +17,10 @@ import java.util.List;
 @Service
 public class ReviewService {
 
-    private ReviewDao reviewDao;
-    private UserStorage userStorage;
-    private FilmStorage filmStorage;
-    private EventDao eventDao;
+    private final ReviewDao reviewDao;
+    private final UserStorage userStorage;
+    private final FilmStorage filmStorage;
+    private final EventDao eventDao;
 
     public ReviewService(ReviewDao reviewDao, UserStorage userStorage, FilmStorage filmStorage, EventDao eventDao) {
         this.reviewDao = reviewDao;
