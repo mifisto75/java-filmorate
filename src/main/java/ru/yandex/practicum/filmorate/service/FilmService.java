@@ -2,9 +2,12 @@ package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Event;
+import ru.yandex.practicum.filmorate.model.type.EventType;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.type.OperationType;
 import ru.yandex.practicum.filmorate.storage.Dao.*;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -15,24 +18,23 @@ import java.util.stream.Collectors;
 @Service
 public class FilmService {
 
-    private FilmStorage filmStorage;
-    private GenreDao genreDao;
-    private LikeDao likeDao;
-    private MpaDao mpaDao;
-    private RecommendationService recommendationService;
-    private DirectorDao directorDao;
-    private EventDao eventDao;
+    private final FilmStorage filmStorage;
+    private final GenreDao genreDao;
+    private final LikeDao likeDao;
+    private final MpaDao mpaDao;
+    private final DirectorDao directorDao;
+    private final EventDao eventDao;
+    private final UserStorage userStorage;
 
     public FilmService(FilmStorage filmStorage, GenreDao genreDao, LikeDao likeDao,
-                       MpaDao mpaDao, DirectorDao directorDao, RecommendationService recommendationService,
-                       EventDao eventDao) {
+                       MpaDao mpaDao, DirectorDao directorDao, EventDao eventDao, UserStorage userStorage) {
         this.filmStorage = filmStorage;
         this.genreDao = genreDao;
         this.likeDao = likeDao;
         this.mpaDao = mpaDao;
         this.directorDao = directorDao;
-        this.recommendationService = recommendationService;
         this.eventDao = eventDao;
+        this.userStorage = userStorage;
     }
 
     public List<Film> getAllFilms() { // все фильмы с заполнеными полями жанр и рейтинг
@@ -77,15 +79,15 @@ public class FilmService {
 
     //PUT /films/{id}/like/{userId} — пользователь ставит лайк фильму.
     public void addFilmLike(int id, int userId) {
-        eventDao.addEvent(new Event(Instant.now().toEpochMilli(), userId, "LIKE",
-                "ADD", id));
+        eventDao.addEvent(new Event(Instant.now().toEpochMilli(), userId, EventType.LIKE,
+                OperationType.ADD, id));
         likeDao.addLike(id, userId);
     }
 
     //DELETE /films/{id}/like/{userId} — пользователь удаляет лайк.
     public void deleteLikeFilm(int id, int userId) {
-        eventDao.addEvent(new Event(Instant.now().toEpochMilli(), userId, "LIKE",
-                "REMOVE", id));
+        eventDao.addEvent(new Event(Instant.now().toEpochMilli(), userId, EventType.LIKE,
+                OperationType.REMOVE, id));
         likeDao.deleteLike(id, userId);
     }
 
@@ -119,12 +121,10 @@ public class FilmService {
                 .limit(count).collect(Collectors.toList());
     }
 
-    public List<Film> getFilmRecommendations(int userId) {
-        return recommendationService.getRecommendedFilms(userId);
-    }
-
     //GET/films/common?userId={userId}&friendId={friendId} - возвращает список общих с другом фильмов с сортировкой по их популярности.
     public List<Film> getCommonFilms(Integer userId, Integer friendId) {
+        userStorage.userExistenceCheck(userId);
+        userStorage.userExistenceCheck(friendId);
         return filmStorage.getCommonFilms(userId, friendId);
     }
 

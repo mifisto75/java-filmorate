@@ -8,8 +8,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.Exeptions.BadPostmanTestsException;
 import ru.yandex.practicum.filmorate.Exeptions.NotFoundException;
+import ru.yandex.practicum.filmorate.model.Like;
 import ru.yandex.practicum.filmorate.storage.Dao.LikeDao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import static java.lang.String.format;
@@ -38,10 +41,10 @@ public class LikeDaoImpl implements LikeDao {
     }
 
     @Override
-    public void deleteLike(int filmId, int userId)  {
+    public void deleteLike(int filmId, int userId) {
         try {
             int i = jdbcTemplate.queryForObject(format(
-                    "SELECT film_id + user_id FROM film_like_list WHERE film_id=%d AND user_id=%d", filmId, userId),
+                            "SELECT film_id + user_id FROM film_like_list WHERE film_id=%d AND user_id=%d", filmId, userId),
                     Integer.class);
             //клас костыль который выбрасывает исключение NotFoundException если в базе пусто
         } catch (
@@ -55,5 +58,19 @@ public class LikeDaoImpl implements LikeDao {
     public List<Integer> sizeLikeFilmList() {
         return jdbcTemplate.queryForList("SELECT film_id FROM (SELECT film_id, COUNT(user_id) as count_users " +
                 "FROM film_like_list GROUP BY film_id) as subquery ORDER BY count_users DESC", Integer.class);
+    }
+
+    @Override
+    public List<Like> getAllLikes() {
+        return jdbcTemplate.query("SELECT * FROM film_like_list", this::rsToLike);
+    }
+
+    private Like rsToLike(ResultSet rs, int rowNum) throws SQLException {
+        int filmId = rs.getInt("film_id");
+        int userId = rs.getInt("user_id");
+        return Like.builder()
+                .filmId(filmId)
+                .userId(userId)
+                .build();
     }
 }
