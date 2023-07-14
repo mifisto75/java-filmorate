@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS review_like_list
 
 CREATE TABLE IF NOT EXISTS events
 (
-    time_stamp NUMERIC NOT NULL,
+    time_stamp LONG NOT NULL,
     user_id INTEGER NOT NULL REFERENCES users (user_id) ON DELETE CASCADE,
     event_type VARCHAR NOT NULL,
     operation VARCHAR NOT NULL,
