@@ -12,6 +12,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.String.format;
 
@@ -26,7 +27,7 @@ public class UserDbStorage implements UserStorage {
     }
 
     @Override
-    public ArrayList<User> allUsers() { // получение списка всех пользователей.
+    public List<User> getAllUsers() { // получение списка всех пользователей.
         return new ArrayList<>(jdbcTemplate.query("SELECT * FROM users", new UserMapper()));
     }
 
@@ -46,10 +47,10 @@ public class UserDbStorage implements UserStorage {
         }
         jdbcTemplate.update("UPDATE users SET email=?, login=?, name=?, birthday=? WHERE user_id=?",
                 user.getEmail(), user.getLogin(), user.getName(), user.getBirthday(), user.getId());
-        return getUserId(user.getId());
+        return getUserById(user.getId());
     }
 
-    public User getUserId(int id) { // выдача юзера по id
+    public User getUserById(int id) { // выдача юзера по id
         userExistenceCheck(id);
             User user = jdbcTemplate.queryForObject(format("SELECT * FROM users WHERE user_id=%d", id), new UserMapper());
             return user;
@@ -60,6 +61,16 @@ public class UserDbStorage implements UserStorage {
             User user = jdbcTemplate.queryForObject(format("SELECT * FROM users WHERE user_id=%d", id), new UserMapper());
         } catch (EmptyResultDataAccessException e) {
             throw new NotFoundException("по вашему id " + id + " не был найден пользыатель ");
+        }
+    }
+
+    @Override
+    public void deleteUser(int userId) {
+        try {
+            jdbcTemplate.update("DELETE FROM users WHERE user_id = ?", userId);
+            jdbcTemplate.update("DELETE FROM user_friend_list WHERE from_user_id=? or to_user_id=?", userId, userId);
+        } catch (EmptyResultDataAccessException e) {
+            throw new NotFoundException("неверный id пользователя, id: " + userId);
         }
     }
 

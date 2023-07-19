@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -27,7 +28,9 @@ public class FilmTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     @Test
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     void addFilmOkTest() throws Exception {
         mockMvc.perform(
                 post("/films")
@@ -42,8 +45,9 @@ public class FilmTest {
         ).andExpect(status().isOk());
     }
 
-
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     @Test
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     void addFilmFailNameTest() throws Exception {
         mockMvc.perform(
                 post("/films")
@@ -57,7 +61,9 @@ public class FilmTest {
         ).andExpect(status().is4xxClientError());
     }
 
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     @Test
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     void addFilmFailDescripsonTest() throws Exception {
         mockMvc.perform(
                 post("/films")
@@ -71,8 +77,9 @@ public class FilmTest {
         ).andExpect(status().is4xxClientError());
     }
 
-
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     @Test
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     void addFilmFailDurationt() throws Exception {
         mockMvc.perform(
                 post("/films")
@@ -86,7 +93,9 @@ public class FilmTest {
         ).andExpect(status().is4xxClientError());
     }
 
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     @Test
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     void updateFilmOkTest() throws Exception {
         mockMvc.perform(
                 post("/films")
@@ -114,7 +123,9 @@ public class FilmTest {
         ).andExpect(status().isOk());
     }
 
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     @Test
+    @Sql(scripts = {"/schema.sql", "/data.sql"})
     void updateFilmUnknownTest() throws Exception {
         mockMvc.perform(
                 put("/films")
