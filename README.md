@@ -14,7 +14,7 @@ ER диаграмма
 
 приложение было созданно как групавой проект 
 в неём принимали участие :
-julia-gerasimenko - https://github.com/julia-gerasimenko
-CheTigor - https://github.com/CheTigor/CheTigor
-marina52746 - https://github.com/marina52746
-gandistip - https://github.com/gandistip
+julia-gerasimenko - https://github.com/julia-gerasimenko ,
+CheTigor - https://github.com/CheTigor/CheTigor ,
+marina52746 - https://github.com/marina52746 ,
+gandistip - https://github.com/gandistip ,
