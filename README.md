@@ -17,4 +17,4 @@ ER диаграмма
 julia-gerasimenko - https://github.com/julia-gerasimenko ,
 CheTigor - https://github.com/CheTigor/CheTigor ,
 marina52746 - https://github.com/marina52746 ,
-gandistip - https://github.com/gandistip ,
+gandistip - https://github.com/gandistip .
